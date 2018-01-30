@@ -4,16 +4,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("nivel1")
-public class BagLevel1 extends AbstractBag {
+@Profile("nivel3")
+public class BagLevel3 extends AbstractBag {
 
-
-	public BagLevel1() {
-		capacity = 20;
+	public BagLevel3() {
+		capacity = 100;
 	}
-
-
-
 
 
 }

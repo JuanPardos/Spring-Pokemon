@@ -38,9 +38,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="ingredient" items="${recipe.ingredients}">
+			<c:forEach var="item" items="${person.mochila.items}">
 				<tr>
-					<td><c:out value="${ingredient.name}" /></td>
+					<td><c:out value="${item.name}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>
