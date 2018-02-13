@@ -14,7 +14,7 @@
 <body>
 
 	<form:form action="insert" method="post">
-		<span>nombre del estudianto:</span>
+		<span>nombre del estudiante:</span>
 		<form:input type="text" path="name" />
 		<input type="submit" value="Guardar nombre estudiante" />
 	</form:form>
@@ -28,7 +28,7 @@
 
 	<form:form action="insert" method="post">
 		<span>nuevo item:</span>
-		<form:input type="text" path="person.item" />
+		<form:input type="text" path="item.name" />
 		<input type="submit" value="guardar item"/>
 	</form:form>
 	<table border="1">
@@ -38,7 +38,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="item" items="${person.mochila.items}">
+			<c:forEach var="item" items="${person.bag.items}">
 				<tr>
 					<td><c:out value="${item.name}" /></td>
 				</tr>
@@ -54,12 +54,12 @@
             </tr>
         </thead>
         <tbody>
-                <tr>primaria
-                    <td><c:out value="${person.primary.name}" /></td>
-                </tr>
-                <tr>secundaria
-                    <td><c:out value="${person.secondary.name}" /></td>
-                </tr>
+	        <tr>primaria
+	            <td><c:out value="${person.primary.name}" /></td>
+	        </tr>
+	        <tr>secundaria
+	            <td><c:out value="${person.secondary.name}" /></td>
+	        </tr>
         </tbody>
     </table>
 	<br />
