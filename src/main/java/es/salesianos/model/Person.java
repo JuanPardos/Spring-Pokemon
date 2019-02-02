@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Person {
-
-	@Autowired
+	private String person;
+	private String name;
 	private Bag bag;
 	private Weapon primary;
 	private Weapon secondary;
 	private Item item;
-
+	
 	public Bag getBag() {
 		return bag;
 	}
@@ -36,5 +36,16 @@ public class Person {
 	public void setItem(Item item) {
 		this.item = item;
 	}
-
+	public String getPerson() {
+		return person;
+	}
+	public void setPerson(String person) {
+		this.person = person;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 }
