@@ -13,7 +13,7 @@
 </head>
 <body>
 
-	<form:form action="insert" method="post">
+	<form:form action="insert" method="post" modelAttribute="person">
 		<span>nombre del estudiante:</span>
 		<form:input type="text" path="name" />
 		<input type="submit" value="Guardar nombre estudiante" />
@@ -26,7 +26,7 @@
 	<br />
 
 
-	<form:form action="insert" method="post">
+	<form:form action="insert" method="post" modelAttribute="person">
 		<span>nuevo item:</span>
 		<form:input type="text" path="item.name" />
 		<input type="submit" value="guardar item"/>

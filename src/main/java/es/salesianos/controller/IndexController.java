@@ -28,8 +28,8 @@ public class IndexController {
 	public ModelAndView index() {
 		person = new Person();
 		person.setItem(new Item());
-		ModelAndView modelAndView = new ModelAndView("index", "command", person);
-		modelAndView.addObject("person", this.person);
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("person", person);
 		return modelAndView;
 	}
 
@@ -38,8 +38,8 @@ public class IndexController {
 	public ModelAndView personInsert(Person person) {
 		log.debug("personInsert:" + this.person.toString());		
 		addPageData(person);
-		ModelAndView modelAndView = new ModelAndView("index", "command", person);
-		modelAndView.addObject("recipe", this.person);
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("recipe", person);
 		return modelAndView;
 	}
 	
@@ -66,8 +66,8 @@ public class IndexController {
 	public ModelAndView itemInsert(Person person) {
 		log.debug("ingredientInsert:" + this.person.toString());
 		addPageData(person);
-		ModelAndView modelAndView = new ModelAndView("index", "command", person);
-		modelAndView.addObject("recipe", this.person);
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("recipe", person);
 		return modelAndView;
 	}
 
@@ -78,8 +78,8 @@ public class IndexController {
 		this.person.setPrimary(this.person.getSecondary());
 		this.person.setSecondary(tmp);
 		System.out.println("El arma activa es " + this.person.getPrimary().getName());
-		ModelAndView modelAndView = new ModelAndView("index", "command", person);
-		modelAndView.addObject("person", this.person);
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("person", person);
 		return modelAndView;
 	}
 
