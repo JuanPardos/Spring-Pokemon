@@ -28,7 +28,7 @@ public abstract class AbstractBag implements Bag {
 
 	@Override
 	public boolean isFull() {
-		return capacity == sumItems();
+		return capacity <= sumItems();
 	}
 
 	@Override
@@ -36,12 +36,14 @@ public abstract class AbstractBag implements Bag {
 		int weight = Integer.parseInt(item.getPeso());
 		if (spaceAvalaible() < weight) {
 			System.out.println("no se pudo añadir el elemento " + item.getName());
+		} else {
+			items.add(item);
 		}
 	}
 
 	@Override
 	public int spaceAvalaible() {
-		return sumItems();
+		return capacity - sumItems();
 	}
 
 	public  int getCapacity() {

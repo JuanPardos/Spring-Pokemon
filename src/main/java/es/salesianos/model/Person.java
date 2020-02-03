@@ -7,7 +7,10 @@ import org.springframework.stereotype.Component;
 public class Person {
 	private String person;
 	private String name;
+
+	@Autowired
 	private Bag bag;
+
 	private Weapon primary;
 	private Weapon secondary;
 	private Item item;

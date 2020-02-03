@@ -28,7 +28,12 @@
 
 	<form:form action="insert" method="post" modelAttribute="person">
 		<span>nuevo item:</span>
+		<span>nombre:</span>
 		<form:input type="text" path="item.name" />
+		<span>peso:</span>
+		<form:input type="text" path="item.peso" />
+		<span>tipo:</span>
+		<form:input type="text" path="item.type" />
 		<input type="submit" value="guardar item"/>
 	</form:form>
 	<table border="1">
@@ -41,6 +46,8 @@
 			<c:forEach var="item" items="${person.bag.items}">
 				<tr>
 					<td><c:out value="${item.name}" /></td>
+					<td><c:out value="${item.peso}" /></td>
+					<td><c:out value="${item.type}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -71,7 +78,7 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="weapon" items="${person.primary.name}">
+            <c:forEach var="weapon" items="${person.primary}">
                 <tr>
                     <td><c:out value="${weapon.name}" /></td>
                 </tr>
@@ -88,7 +95,7 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="weapon" items="${person.secondary.name}">
+            <c:forEach var="weapon" items="${person.secondary}">
                 <tr>
                     <td><c:out value="${weapon.name}" /></td>
                 </tr>

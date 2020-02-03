@@ -1,15 +1,16 @@
 package es.salesianos.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.salesianos.model.AbstractBag;
-import es.salesianos.model.Bag;
 import es.salesianos.model.Item;
 import es.salesianos.model.Person;
 import es.salesianos.model.Weapon;
@@ -19,58 +20,51 @@ public class IndexController {
 
 	private static Logger log = LogManager.getLogger(IndexController.class);
 
+	@Autowired
 	private Person person;
-	private Item item;
-	private Bag bag1;
-	private AbstractBag bag;
 
 	@GetMapping("/")
 	public ModelAndView index() {
-		person = new Person();
-		person.setItem(new Item());
 		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("person", person);
+		modelAndView.addObject("person", this.person);
 		return modelAndView;
 	}
 
 	
 	@PostMapping("insert")
-	public ModelAndView personInsert(Person person) {
+	public ModelAndView personInsert(Person personForm) {
 		log.debug("personInsert:" + this.person.toString());		
-		addPageData(person);
 		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("recipe", person);
+		addPageData(personForm);
+		modelAndView.addObject("person", person);
 		return modelAndView;
 	}
 	
 	private void addPageData(Person personForm) {
 
 		if (!StringUtils.isEmpty(personForm.getName())) {
-			this.person.setName(personForm.getName());
+			person.setName(personForm.getName());
 		}
 
-		if (!StringUtils.isEmpty(personForm.getBag())) {
-			bag.addItem(item);
-			personForm.setName("");
-			this.person.getBag().addItem(item);
-		}
 		if (!StringUtils.isEmpty(personForm.getItem())) {
 			Item item = new Item();
-			item.setName(personForm.getName());
-			personForm.setItem(item);
-			this.person.getItem().getName();
+			if (personForm.getItem().getType().equalsIgnoreCase("weapon")) {
+				Weapon weapon = new Weapon();
+				weapon.setName(personForm.getItem().getName());
+			} else if (personForm.getItem().getType().equalsIgnoreCase("accesory")) {
+				List<Item> items = person.getPrimary().getItems();
+				items.add(item);
+				person.getPrimary().setItems(items);
+			} else {
+				item.setName(personForm.getItem().getName());
+				item.setPeso(personForm.getItem().getPeso());
+				item.setType(personForm.getItem().getType());
+				this.person.getBag().addItem(item);
+			}
+			this.person.setItem(item);
 		}
 	}
 	
-	@PostMapping("itemInsert")
-	public ModelAndView itemInsert(Person person) {
-		log.debug("ingredientInsert:" + this.person.toString());
-		addPageData(person);
-		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("recipe", person);
-		return modelAndView;
-	}
-
 	@PostMapping("switchWeapon")
 	public ModelAndView switchWeapon(Person person) {
 		Weapon tmp;

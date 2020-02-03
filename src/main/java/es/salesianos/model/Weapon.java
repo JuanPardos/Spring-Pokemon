@@ -1,7 +1,6 @@
 package es.salesianos.model;
 
 import java.util.List;
-
 public class Weapon {
 
 	
