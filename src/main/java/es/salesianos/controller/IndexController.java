@@ -53,7 +53,13 @@ public class IndexController {
 
 				Weapon weapon = new Weapon();
 				weapon.setName(personForm.getItem().getName());
-				person.setPrimary(weapon);
+				if (person.getPrimary() == null) {
+					person.setPrimary(weapon);
+				} else if (person.getSecondary() == null) {
+					person.setSecondary(weapon);
+				} else {
+					person.setPrimary(weapon);
+				}
 
 			} else if (personForm.getItem().getType().equalsIgnoreCase("accesory")) {
 
@@ -73,11 +79,14 @@ public class IndexController {
 	
 	@PostMapping("switchWeapon")
 	public ModelAndView switchWeapon(Person person) {
+
 		Weapon tmp;
 		tmp = this.person.getPrimary();
 		this.person.setPrimary(this.person.getSecondary());
 		this.person.setSecondary(tmp);
-		System.out.println("El arma activa es " + this.person.getPrimary().getName());
+		if (this.person.getPrimary().getName() != null) {
+			System.out.println("El arma activa es " + this.person.getPrimary().getName());
+		}
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("person", person);
 		return modelAndView;
