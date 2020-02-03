@@ -19,8 +19,8 @@
 		<input type="submit" value="Guardar nombre estudiante" />
 	</form:form>
 	<br />
-	<br />
-	El nombre de la estudiantes es <span><c:out value="${person.name}" /></span>
+	<br /> El nombre de la estudiantes es
+	<span><c:out value="${person.name}" /></span>
 	<br />
 	<br />
 	<br />
@@ -34,12 +34,14 @@
 		<form:input type="text" path="item.peso" />
 		<span>tipo:</span>
 		<form:input type="text" path="item.type" />
-		<input type="submit" value="guardar item"/>
+		<input type="submit" value="guardar item" />
 	</form:form>
 	<table border="1">
 		<thead>
 			<tr>
 				<td>Mochila</td>
+				<td>peso</td>
+				<td>tipo</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -55,59 +57,65 @@
 	<br />
 	<br />
 	<table border="1">
-        <thead>
-            <tr>
-                <td>armas disponibles</td>
-            </tr>
-        </thead>
-        <tbody>
-	        <tr>primaria
-	            <td><c:out value="${person.primary.name}" /></td>
-	        </tr>
-	        <tr>secundaria
-	            <td><c:out value="${person.secondary.name}" /></td>
-	        </tr>
-        </tbody>
-    </table>
+		<thead>
+			<tr>
+				<td>armas disponibles</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				primaria
+				<td><c:out value="${person.primary.name}" /></td>
+			</tr>
+			<tr>
+				secundaria
+				<td><c:out value="${person.secondary.name}" /></td>
+			</tr>
+		</tbody>
+	</table>
 	<br />
 	<br />
 	<table border="1">
-        <thead>
-            <tr>
-                <td>primary customization</td>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="weapon" items="${person.primary}">
-                <tr>
-                    <td><c:out value="${weapon.name}" /></td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-	<br /> 
-	
-	
-<table border="1">
-        <thead>
-            <tr>
-                <td>secundary customization</td>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="weapon" items="${person.secondary}">
-                <tr>
-                    <td><c:out value="${weapon.name}" /></td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+		<thead>
+			<tr>
+				<td>primary customization</td>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="item" items="${person.primary.items}">
+				<tr>
+					<td><c:out value="${item.name}" /></td>
+					<td><c:out value="${item.peso}" /></td>
+					<td><c:out value="${item.type}" /></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+	<br />
+
+
+	<table border="1">
+		<thead>
+			<tr>
+				<td>secundary customization</td>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="item" items="${person.secondary.items}">
+				<tr>
+                    <td><c:out value="${item.name}" /></td>
+                    <td><c:out value="${item.peso}" /></td>
+                    <td><c:out value="${item.type}" /></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 
 
 	<form:form action="switchWeapon" method="post">
 		<input type="submit" value="cambiar armas" />
 	</form:form>
-	
+
 
 
 

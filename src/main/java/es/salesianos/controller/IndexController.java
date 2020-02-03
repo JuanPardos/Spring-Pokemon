@@ -35,6 +35,7 @@ public class IndexController {
 	public ModelAndView personInsert(Person personForm) {
 		log.debug("personInsert:" + this.person.toString());		
 		ModelAndView modelAndView = new ModelAndView("index");
+		// this.person=personForm;
 		addPageData(personForm);
 		modelAndView.addObject("person", person);
 		return modelAndView;
@@ -49,12 +50,17 @@ public class IndexController {
 		if (!StringUtils.isEmpty(personForm.getItem())) {
 			Item item = new Item();
 			if (personForm.getItem().getType().equalsIgnoreCase("weapon")) {
+
 				Weapon weapon = new Weapon();
 				weapon.setName(personForm.getItem().getName());
+				person.setPrimary(weapon);
+
 			} else if (personForm.getItem().getType().equalsIgnoreCase("accesory")) {
+
 				List<Item> items = person.getPrimary().getItems();
 				items.add(item);
 				person.getPrimary().setItems(items);
+
 			} else {
 				item.setName(personForm.getItem().getName());
 				item.setPeso(personForm.getItem().getPeso());

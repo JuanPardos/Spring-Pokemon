@@ -1,11 +1,12 @@
 package es.salesianos.model;
 
+import java.util.ArrayList;
 import java.util.List;
 public class Weapon {
 
 	
 	private String name;
-	private List<Item> items;
+	private List<Item> items = new ArrayList<>();
 
 	public String getName() {
 		return name;

@@ -1,9 +1,10 @@
 package es.salesianos.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBag implements Bag {
-	protected List<Item> items;
+	protected List<Item> items = new ArrayList<Item>();
 	
 	public int capacity;
 	
