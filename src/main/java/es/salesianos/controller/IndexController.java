@@ -66,6 +66,7 @@ public class IndexController {
 				List<Item> items = person.getPrimary().getItems();
 				items.add(item);
 				person.getPrimary().setItems(items);
+				System.out.println("accesorios:" + items);
 
 			} else {
 				item.setName(personForm.getItem().getName());
@@ -78,7 +79,7 @@ public class IndexController {
 	}
 	
 	@PostMapping("switchWeapon")
-	public ModelAndView switchWeapon(Person person) {
+	public ModelAndView switchWeapon() {
 
 		Weapon tmp;
 		tmp = this.person.getPrimary();
@@ -88,7 +89,7 @@ public class IndexController {
 			System.out.println("El arma activa es " + this.person.getPrimary().getName());
 		}
 		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("person", person);
+		modelAndView.addObject("person", this.person);
 		return modelAndView;
 	}
 
