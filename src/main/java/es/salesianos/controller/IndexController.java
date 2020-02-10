@@ -1,7 +1,5 @@
 package es.salesianos.controller;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.salesianos.model.Item;
-import es.salesianos.model.Person;
-import es.salesianos.model.Weapon;
+import es.salesianos.model.PokeAttacking;
+import es.salesianos.model.Pokemon;
+import es.salesianos.model.Trainer;
 
 @Controller
 public class IndexController {
@@ -21,78 +19,74 @@ public class IndexController {
 	private static Logger log = LogManager.getLogger(IndexController.class);
 
 	@Autowired
-	private Person person;
+	private Trainer trainer;
 
 	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("person", this.person);
+		modelAndView.addObject("trainer", this.trainer);
 		return modelAndView;
 	}
 
-	
 	@PostMapping("insert")
-	public ModelAndView personInsert(Person personForm) {
-		log.debug("personInsert:" + this.person.toString());		
+	public ModelAndView trainerInsert(Trainer trainerForm) {
+		log.debug("personInsert:" + this.trainer.toString());
 		ModelAndView modelAndView = new ModelAndView("index");
-		// this.person=personForm;
-		addPageData(personForm);
-		modelAndView.addObject("person", person);
+		addPageData(trainerForm);
+		modelAndView.addObject("trainer", trainer);
 		return modelAndView;
 	}
-	
-	private void addPageData(Person personForm) {
 
-		if (!StringUtils.isEmpty(personForm.getName())) {
-			person.setName(personForm.getName());
+	private void addPageData(Trainer trainerForm) {
+		if (!StringUtils.isEmpty(trainerForm.getName())) {
+			trainer.setName(trainerForm.getName());
 		}
 
-		if (!StringUtils.isEmpty(personForm.getItem())) {
-			Item item = new Item();
-			if (personForm.getItem().getType().equalsIgnoreCase("weapon")) {
+		if (!StringUtils.isEmpty(trainerForm.getPokemon())) {
+			Pokemon pokemon = new Pokemon();
+			PokeAttacking weapon = new PokeAttacking();
 
-				Weapon weapon = new Weapon();
-				weapon.setName(personForm.getItem().getName());
-				if (person.getPrimary() == null) {
-					person.setPrimary(weapon);
-				} else if (person.getSecondary() == null) {
-					person.setSecondary(weapon);
-				} else {
-					person.setPrimary(weapon);
-				}
-
-			} else if (personForm.getItem().getType().equalsIgnoreCase("accesory")) {
-
-				List<Item> items = person.getPrimary().getItems();
-				items.add(item);
-				person.getPrimary().setItems(items);
-				System.out.println("accesorios:" + items);
-
+			if (trainer.getPrimary() == null) {
+				trainer.setPrimary(weapon);
+				insertMethod(trainerForm, pokemon);
 			} else {
-				item.setName(personForm.getItem().getName());
-				item.setPeso(personForm.getItem().getPeso());
-				item.setType(personForm.getItem().getType());
-				this.person.getBag().addItem(item);
+				insertMethod(trainerForm, pokemon);
 			}
-			this.person.setItem(item);
+			weapon.setName(pokemon.getName());
+			weapon.setLevel(pokemon.getLevel());
+			weapon.setStatus(pokemon.getStatus());
+			weapon.setAttack(pokemon.getAttack());
+			weapon.setHP(pokemon.getHP());
+			weapon.setMaxHP(pokemon.getMaxHP());
+
+			this.trainer.setPokemon(pokemon);
 		}
 	}
-	
-	@PostMapping("switchWeapon")
-	public ModelAndView switchWeapon() {
 
-		Weapon tmp;
-		tmp = this.person.getPrimary();
-		this.person.setPrimary(this.person.getSecondary());
-		this.person.setSecondary(tmp);
-		if (this.person.getPrimary().getName() != null) {
-			System.out.println("El arma activa es " + this.person.getPrimary().getName());
+	private void insertMethod(Trainer trainerForm, Pokemon pokemon) {
+		pokemon.setName(trainerForm.getPokemon().getName());
+		pokemon.setLevel(trainerForm.getPokemon().getLevel());
+		pokemon.setStatus(trainerForm.getPokemon().getStatus());
+
+		pokemon.setAttack((int) (Math.random() * 50) + (Integer.parseInt(trainerForm.getPokemon().getLevel())) / 2);
+		pokemon.setMaxHP(Integer.parseInt(trainerForm.getPokemon().getLevel()) * 4);
+
+		this.trainer.getTeam().addPokemon(pokemon);
+	}
+
+	@PostMapping("switchPokemon")
+	public ModelAndView switchPokemon() {
+
+		PokeAttacking tmp;
+		tmp = this.trainer.getPrimary();
+		this.trainer.setPrimary(this.trainer.getSecondary());
+		this.trainer.setSecondary(tmp);
+		if (this.trainer.getPrimary().getName() != null) {
+			System.out.println("El pokemon activo es " + this.trainer.getPrimary().getName());
 		}
 		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("person", this.person);
+		modelAndView.addObject("trainer", this.trainer);
 		return modelAndView;
 	}
-
-
 
 }
