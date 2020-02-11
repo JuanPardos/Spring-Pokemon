@@ -27,6 +27,19 @@ public abstract class AbstractTeam implements Team {
 		this.pokemons = pokemons;
 	}
 
+	public PokeAttacking setAttackingPokemon(int a) {
+		PokeAttacking poke = new PokeAttacking();
+
+		poke.setAttack(pokemons.get(a).getAttack());
+		poke.setHP(pokemons.get(a).getHP());
+		poke.setLevel(pokemons.get(a).getLevel());
+		poke.setMaxHP(pokemons.get(a).getMaxHP());
+		poke.setName(pokemons.get(a).getName());
+		poke.setStatus(pokemons.get(a).getStatus());
+
+		return poke;
+	}
+
 	@Override
 	public boolean isFull() {
 		if (sumPokemons() == capacity)
@@ -43,4 +56,5 @@ public abstract class AbstractTeam implements Team {
 			pokemons.add(pokemon);
 		}
 	}
+
 }

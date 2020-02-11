@@ -8,4 +8,5 @@ public class EnemyTeam extends AbstractTeam {
 	public EnemyTeam() {
 
 	}
+
 }

@@ -50,6 +50,7 @@ public class IndexController {
 				trainer.setPrimary(weapon);
 				insertMethod(trainerForm, pokemon);
 			} else {
+				trainer.setSecondary(weapon);
 				insertMethod(trainerForm, pokemon);
 			}
 			weapon.setName(pokemon.getName());
@@ -75,15 +76,17 @@ public class IndexController {
 	}
 
 	@PostMapping("switchPokemon")
-	public ModelAndView switchPokemon() {
-
+	public ModelAndView switchPokemon(Trainer trainerForm) {
 		PokeAttacking tmp;
+
 		tmp = this.trainer.getPrimary();
-		this.trainer.setPrimary(this.trainer.getSecondary());
+		this.trainer.setPrimary(this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()));
 		this.trainer.setSecondary(tmp);
+
 		if (this.trainer.getPrimary().getName() != null) {
 			System.out.println("El pokemon activo es " + this.trainer.getPrimary().getName());
 		}
+
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
 		return modelAndView;

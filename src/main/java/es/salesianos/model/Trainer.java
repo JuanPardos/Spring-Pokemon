@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Trainer {
 	private String name;
+	private int aux;
 
 	@Autowired
 	private Team team;
@@ -43,6 +44,12 @@ public class Trainer {
 	}
 	public void setPokemon(Pokemon pokemon) {
 		this.pokemon = pokemon;
+	}
+	public int getAux() {
+		return aux;
+	}
+	public void setAux(int aux) {
+		this.aux = aux;
 	}
 
 }

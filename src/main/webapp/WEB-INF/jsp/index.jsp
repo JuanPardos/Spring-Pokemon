@@ -34,6 +34,7 @@
 		<form:input type="text" path="pokemon.level" />
 		<input type="submit" value="guardar pokemon" />
 	</form:form>
+	<br/>
 	<table border="1">
 		<thead>
 			<tr>
@@ -57,6 +58,18 @@
 		</tbody>
 	</table>
 	<br />
+	
+	<form:form action="switchPokemon" method="post" modelAttribute="trainer">
+		<form:select path="aux">
+			<c:set var = "count" scope = "page" value = "0"/>
+			<c:forEach var="item" items="${trainer.team.pokemons}">
+				<form:option value="${count}"><c:out value="${item.name}"/></form:option>
+				<c:set var="count" value="${count + 1}" scope="page"/>
+			</c:forEach>
+		</form:select>
+		<input type="submit" value="Cambiar pokemon activo" />
+	</form:form>
+	
 	<br />
  	<a>Pokemon Activo</a><br/><c:out value="${trainer.primary.name}"/> &#8212;
 	<c:out value="${trainer.primary.status}"/>&#8212; Nivel: &nbsp;
@@ -64,6 +77,6 @@
 	<c:out value="${trainer.primary.HP}"/> &#47;
 	<c:out value="${trainer.primary.maxHP}"/> Ataque: &nbsp;
 	<c:out value="${trainer.primary.attack}"/>
-
+	
 </body>
 </html>

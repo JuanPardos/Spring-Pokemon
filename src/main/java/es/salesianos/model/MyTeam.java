@@ -10,4 +10,5 @@ public class MyTeam extends AbstractTeam {
 	public MyTeam() {
 
 	}
+
 }
