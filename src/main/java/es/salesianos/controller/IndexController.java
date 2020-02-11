@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import es.salesianos.model.Enemy;
 import es.salesianos.model.PokeAttacking;
 import es.salesianos.model.Pokemon;
 import es.salesianos.model.Trainer;
@@ -21,10 +22,14 @@ public class IndexController {
 	@Autowired
 	private Trainer trainer;
 
+	@Autowired
+	private Enemy enemy;
+
 	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
+		//modelAndView.addObject("enemy", this.enemy);
 		return modelAndView;
 	}
 
@@ -33,7 +38,7 @@ public class IndexController {
 		log.debug("personInsert:" + this.trainer.toString());
 		ModelAndView modelAndView = new ModelAndView("index");
 		addPageData(trainerForm);
-		modelAndView.addObject("trainer", trainer);
+		modelAndView.addObject("trainer", this.trainer);
 		return modelAndView;
 	}
 
@@ -69,8 +74,8 @@ public class IndexController {
 		pokemon.setLevel(trainerForm.getPokemon().getLevel());
 		pokemon.setStatus(trainerForm.getPokemon().getStatus());
 
-		pokemon.setAttack((int) (Math.random() * 50) + (Integer.parseInt(trainerForm.getPokemon().getLevel())) / 2);
-		pokemon.setMaxHP(Integer.parseInt(trainerForm.getPokemon().getLevel()) * 4);
+		pokemon.setAttack((int) (Math.random() * 40) + (trainerForm.getPokemon().getLevel()) / 2);
+		pokemon.setMaxHP(trainerForm.getPokemon().getLevel() * 4);
 
 		this.trainer.getTeam().addPokemon(pokemon);
 	}
@@ -90,6 +95,25 @@ public class IndexController {
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
 		return modelAndView;
+	}
+
+	@PostMapping("createEnemy")
+	public ModelAndView createEnemy() {
+		Pokemon pokemon = new Pokemon();
+
+		pokemon.setName("Joputa");
+		pokemon.setLevel((int) (Math.random() * 50) + 50);
+		pokemon.setAttack((int) (Math.random() * 45) + (pokemon.getLevel() / 2));
+		pokemon.setMaxHP(pokemon.getLevel() * 4);
+		pokemon.setStatus("Vivo");
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("enemy", this.enemy);
+
+		this.enemy.setPokemon(pokemon);
+
+		return modelAndView;
+
 	}
 
 }

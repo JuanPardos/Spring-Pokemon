@@ -3,7 +3,7 @@ package es.salesianos.model;
 public class Pokemon {
 
 	private String name;
-	private String level;
+	private int level;
 	private int attack;
 	private int maxHP;
 	private String status = "Vivo";
@@ -15,10 +15,10 @@ public class Pokemon {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getLevel() {
+	public int getLevel() {
 		return level;
 	}
-	public void setLevel(String level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
 	public int getHP() {

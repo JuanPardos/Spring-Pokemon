@@ -3,6 +3,9 @@ package es.salesianos.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
 public abstract class AbstractTeam implements Team {
 	protected List<Pokemon> pokemons = new ArrayList<Pokemon>();
 
