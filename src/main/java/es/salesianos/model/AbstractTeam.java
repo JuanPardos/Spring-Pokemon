@@ -43,6 +43,10 @@ public abstract class AbstractTeam implements Team {
 		return poke;
 	}
 
+	public void removePokemonById(int b) {
+		pokemons.remove(b);
+	}
+
 	@Override
 	public boolean isFull() {
 		if (sumPokemons() == capacity)

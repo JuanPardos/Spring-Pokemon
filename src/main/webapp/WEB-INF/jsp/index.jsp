@@ -11,10 +11,10 @@
 	href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css"
 	rel="stylesheet">
 </head>
-<body>
+<body style="margin-left:10px">
 
 	<form:form action="insert" method="post" modelAttribute="trainer">
-		<span>nombre del entrenador:</span>
+		<span>Nombre Entrenador:</span>
 		<form:input type="text" path="name" />
 		<input type="submit" value="Guardar nombre entrenador" />
 	</form:form>
@@ -27,17 +27,18 @@
 
 
 	<form:form action="insert" method="post" modelAttribute="trainer">
-		<span>nuevo pokemon:</span>
-		<span>nombre:</span>
-		<form:input type="text" path="pokemon.name" />
-		<span>nivel:</span>
-		<form:input type="text" path="pokemon.level" />
-		<input type="submit" value="guardar pokemon" />
+		<span>Nuevo pokemon: &nbsp;</span>
+		<span>Nombre: &nbsp;</span>
+		<form:input type="text" path="pokemon.name" /> &nbsp;
+		<span>Nivel: &nbsp;</span>
+		<form:input type="text" path="pokemon.level" /> &nbsp;
+		<input type="submit" value="Guardar pokemon" />
 	</form:form>
 	<br/>
 	<table border="1">
 		<thead>
 			<tr>
+				<td>#</td>
 				<td>Nombre</td>
 				<td>Estado</td>
 				<td>Nivel</td>
@@ -46,30 +47,49 @@
 			</tr>
 		</thead>
 		<tbody>
+			<c:set var = "count2" scope = "page" value = "1"/>
 			<c:forEach var="item" items="${trainer.team.pokemons}">
 				<tr>
+					<td style="text-align:center"><c:out value="${count2}" /></td>
 					<td style="text-align:center"><c:out value="${item.name}" /></td>
 					<td style="text-align:center"><c:out value="${item.status}" /></td>
 					<td style="text-align:center"><c:out value="${item.level}" /></td>
 					<td style="text-align:center"><c:out value="${item.HP}" /></td>
 					<td style="text-align:center"><c:out value="${item.attack}" /></td>
 				</tr>
+				<c:set var="count2" value="${count2 + 1}" scope="page"/>
 			</c:forEach>
 		</tbody>
 	</table>
 	<br />
 	
+	<form:form action="releasePokemon" method="post" modelAttribute="trainer">
+		<form:select path="aux2">
+			<c:set var = "count" scope = "page" value = "0"/>
+			<c:forEach var="item" items="${trainer.team.pokemons}">
+				<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
+				<c:set var="count" value="${count + 1}" scope="page"/>
+			</c:forEach>
+		</form:select>
+		<input type="submit" value="Liberar Pokemon" style="background-color:red" />
+	</form:form>
+	
+	<br/><br/>
 	<form:form action="switchPokemon" method="post" modelAttribute="trainer">
 		<form:select path="aux">
 			<c:set var = "count" scope = "page" value = "0"/>
 			<c:forEach var="item" items="${trainer.team.pokemons}">
-				<form:option value="${count}"><c:out value="${item.name}"/></form:option>
+				<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
 				<c:set var="count" value="${count + 1}" scope="page"/>
 			</c:forEach>
 		</form:select>
 		<input type="submit" value="Cambiar pokemon activo" />
 	</form:form>
+	
 	<br/><br/>
+	
+	
+	
 	<form:form action="createEnemy" method="post" modelAttribute="enemy">
 		<input type="submit" value="Entrar a la hierba alta"/>
 	</form:form>

@@ -74,10 +74,13 @@ public class IndexController {
 		pokemon.setLevel(trainerForm.getPokemon().getLevel());
 		pokemon.setStatus(trainerForm.getPokemon().getStatus());
 
-		pokemon.setAttack((int) (Math.random() * 40) + (trainerForm.getPokemon().getLevel()) / 2);
-		pokemon.setMaxHP(trainerForm.getPokemon().getLevel() * 4);
-
-		this.trainer.getTeam().addPokemon(pokemon);
+		if (trainerForm.getPokemon().getLevel() > 0 && trainerForm.getPokemon().getLevel() <= 100) {
+			pokemon.setAttack((int) (Math.random() * (10 + (trainerForm.getPokemon().getLevel()) / 2))
+				+ ((trainerForm.getPokemon().getLevel()) / 2) + 1);
+			pokemon.setMaxHP(trainerForm.getPokemon().getLevel() * 4);
+			this.trainer.getTeam().addPokemon(pokemon);
+		} else
+			System.out.println("El nivel del pokemon no es correcto");
 	}
 
 	@PostMapping("switchPokemon")
@@ -97,13 +100,22 @@ public class IndexController {
 		return modelAndView;
 	}
 
+	@PostMapping("releasePokemon")
+	public ModelAndView releasePokemon(Trainer trainerForm) {
+		this.trainer.getTeam().removePokemonById(trainerForm.getAux2());
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("trainer", this.trainer);
+		return modelAndView;
+	}
+
 	@PostMapping("createEnemy")
 	public ModelAndView createEnemy() {
 		Pokemon pokemon = new Pokemon();
 
 		pokemon.setName("Joputa");
-		pokemon.setLevel((int) (Math.random() * 50) + 50);
-		pokemon.setAttack((int) (Math.random() * 45) + (pokemon.getLevel() / 2));
+		pokemon.setLevel((int) (Math.random() * 30) + 70);
+		pokemon.setAttack((int) (Math.random() * (5 + (pokemon.getLevel()) / 2)) + ((pokemon.getLevel() / 2)) + 1);
 		pokemon.setMaxHP(pokemon.getLevel() * 4);
 		pokemon.setStatus("Vivo");
 
