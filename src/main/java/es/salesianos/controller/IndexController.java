@@ -22,9 +22,6 @@ public class IndexController {
 	@Autowired
 	private Trainer trainer;
 
-	@Autowired
-	private Enemy enemy;
-
 	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView("index");
@@ -58,6 +55,7 @@ public class IndexController {
 				trainer.setSecondary(weapon);
 				insertMethod(trainerForm, pokemon);
 			}
+
 			weapon.setName(pokemon.getName());
 			weapon.setLevel(pokemon.getLevel());
 			weapon.setStatus(pokemon.getStatus());
@@ -77,10 +75,21 @@ public class IndexController {
 		if (trainerForm.getPokemon().getLevel() > 0 && trainerForm.getPokemon().getLevel() <= 100) {
 			pokemon.setAttack((int) (Math.random() * (10 + (trainerForm.getPokemon().getLevel()) / 2))
 				+ ((trainerForm.getPokemon().getLevel()) / 2) + 1);
-			pokemon.setMaxHP(trainerForm.getPokemon().getLevel() * 4);
+			pokemon.setHP(trainerForm.getPokemon().getLevel() * 4);
+			pokemon.setMaxHP(pokemon.getHP());
 			this.trainer.getTeam().addPokemon(pokemon);
 		} else
 			System.out.println("El nivel del pokemon no es correcto");
+	}
+
+	private void insertEnemy(Trainer trainerForm, Enemy enemyPokemon) {
+		enemyPokemon.setName("Magikarp");
+		enemyPokemon.setLevel((int) (Math.random() * 30) + 70);
+		enemyPokemon.setAttack(
+			(int) (Math.random() * (5 + (enemyPokemon.getLevel()) / 2)) + ((enemyPokemon.getLevel() / 2)) + 1);
+		enemyPokemon.setHP(enemyPokemon.getLevel() * 4);
+		enemyPokemon.setMaxHP(enemyPokemon.getHP());
+		enemyPokemon.setStatus("Vivo");
 	}
 
 	@PostMapping("switchPokemon")
@@ -110,22 +119,38 @@ public class IndexController {
 	}
 
 	@PostMapping("createEnemy")
-	public ModelAndView createEnemy() {
-		Pokemon pokemon = new Pokemon();
-
-		pokemon.setName("Joputa");
-		pokemon.setLevel((int) (Math.random() * 30) + 70);
-		pokemon.setAttack((int) (Math.random() * (5 + (pokemon.getLevel()) / 2)) + ((pokemon.getLevel() / 2)) + 1);
-		pokemon.setMaxHP(pokemon.getLevel() * 4);
-		pokemon.setStatus("Vivo");
+	public ModelAndView createEnemy(Trainer trainerForm) {
+		Enemy enemyPokemon = new Enemy();
+		trainer.setWildPokemon(enemyPokemon);
+		insertEnemy(trainerForm, enemyPokemon);
 
 		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("enemy", this.enemy);
-
-		this.enemy.setPokemon(pokemon);
-
+		modelAndView.addObject("trainer", this.trainer);
 		return modelAndView;
+	}
 
+	@PostMapping("combat")
+	public ModelAndView combat(Trainer trainerForm) {
+		if (trainer.getPrimary().getStatus() == "Vivo") {
+			trainer.getWildPokemon().setHP(trainer.getWildPokemon().getHP() - trainer.getPrimary().getAttack());
+			trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
+		} else {
+			System.out.println(trainer.getPrimary().getName() + " no puede combatir");
+		}
+
+		if (trainer.getPrimary().getHP() <= 0) {
+			trainer.getPrimary().setHP(0);
+			trainer.getPrimary().setStatus("Muerto");
+		}
+
+		if (trainer.getWildPokemon().getHP() <= 0) {
+			trainer.getWildPokemon().setHP(0);
+			trainer.getWildPokemon().setStatus("Muerto");
+		}
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("trainer", this.trainer);
+		return modelAndView;
 	}
 
 }

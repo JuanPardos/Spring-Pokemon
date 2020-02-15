@@ -90,8 +90,12 @@
 	
 	
 	
-	<form:form action="createEnemy" method="post" modelAttribute="enemy">
+	<form:form action="createEnemy" method="post" modelAttribute="trainer">
 		<input type="submit" value="Entrar a la hierba alta"/>
+	</form:form>
+	
+	<form:form action="combat" method="post" modelAttribute="trainer">
+		<input type="submit" value="Combatir"/>
 	</form:form>
 	
 	<br />
@@ -102,12 +106,12 @@
 	<c:out value="${trainer.primary.maxHP}"/> Ataque: &nbsp;
 	<c:out value="${trainer.primary.attack}"/>
 	<br/>
-	<a>Pokemon Enemigo</a><br/><c:out value="${enemy.pokemon.name}"/> &#8212;
-	<c:out value="${enemy.pokemon.status}"/>&#8212; Nivel: &nbsp;
-	<c:out value="${enemy.pokemon.level}"/> Vida: &nbsp;
-	<c:out value="${enemy.pokemon.HP}"/> &#47;
-	<c:out value="${enemy.pokemon.maxHP}"/> Ataque: &nbsp;
-	<c:out value="${enemy.pokemon.attack}"/>
+	<a>Pokemon Enemigo</a><br/><c:out value="${trainer.wildPokemon.name}"/> &#8212;
+	<c:out value="${trainer.wildPokemon.status}"/>&#8212; Nivel: &nbsp;
+	<c:out value="${trainer.wildPokemon.level}"/> Vida: &nbsp;
+	<c:out value="${trainer.wildPokemon.HP}"/> &#47;
+	<c:out value="${trainer.wildPokemon.maxHP}"/> Ataque: &nbsp;
+	<c:out value="${trainer.wildPokemon.attack}"/>
 	
 </body>
 </html>

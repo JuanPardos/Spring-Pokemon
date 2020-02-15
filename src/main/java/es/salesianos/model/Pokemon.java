@@ -22,10 +22,10 @@ public class Pokemon {
 		this.level = level;
 	}
 	public int getHP() {
-		return maxHP;
+		return HP;
 	}
 	public void setHP(int hP) {
-		maxHP = hP;
+		HP = hP;
 	}
 	public int getAttack() {
 		return attack;

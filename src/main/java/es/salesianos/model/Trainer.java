@@ -15,6 +15,7 @@ public class Trainer {
 	private PokeAttacking primary;
 	private PokeAttacking secondary;
 	private Pokemon pokemon;
+	private Enemy wildPokemon;
 
 	public String getName() {
 		return name;
@@ -57,6 +58,12 @@ public class Trainer {
 	}
 	public void setAux2(int aux2) {
 		this.aux2 = aux2;
+	}
+	public Enemy getWildPokemon() {
+		return wildPokemon;
+	}
+	public void setWildPokemon(Enemy wildPokemon) {
+		this.wildPokemon = wildPokemon;
 	}
 
 }
