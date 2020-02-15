@@ -12,6 +12,9 @@ public class Trainer {
 	@Autowired
 	private Team team;
 
+	@Autowired
+	private Ball ball;
+
 	private Pokemon primary;
 	private Pokemon secondary;
 	private Pokemon pokemon;
@@ -64,6 +67,12 @@ public class Trainer {
 	}
 	public void setWildPokemon(Pokemon wildPokemon) {
 		this.wildPokemon = wildPokemon;
+	}
+	public Ball getBall() {
+		return ball;
+	}
+	public void setBall(Ball ball) {
+		this.ball = ball;
 	}
 
 }

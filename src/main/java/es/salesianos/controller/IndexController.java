@@ -81,12 +81,16 @@ public class IndexController {
 	}
 
 	private void insertEnemy(Trainer trainerForm, Pokemon enemyPokemon) {
-		enemyPokemon.setName("Magikarp");
-		enemyPokemon.setLevel((int) (Math.random() * 30) + 70);
+		String nombres[] = {"Flygon", "Salamence", "Giratina", "Groudon", "Kyogre", "Rayquaza", "Squirtle", "Charizard",
+			"Smeargle", "Regirock", "Registeel", "Regice", "Giraffarig", "Porygon2", "Lucario", "Raychu"};
+
+		enemyPokemon.setName(nombres[(int) (Math.random() * nombres.length)]);
+		enemyPokemon.setLevel((int) (Math.random() * 30) + 50);
 		enemyPokemon.setAttack(
 			(int) (Math.random() * (5 + (enemyPokemon.getLevel()) / 2)) + ((enemyPokemon.getLevel() / 2)) + 1);
 		enemyPokemon.setMaxHP(enemyPokemon.getLevel() * 4);
 		enemyPokemon.setHP(enemyPokemon.getMaxHP());
+		enemyPokemon.setCaptureRate((int) (Math.random() * 30) + 70); //Valores entre 70 y 100.
 		enemyPokemon.setStatus("Vivo");
 	}
 
@@ -168,7 +172,31 @@ public class IndexController {
 				System.out.println(trainer.getPrimary().getName() + " no se puede curar, tiene toda la vida");
 			}
 		} else
-			System.out.println(trainer.getPrimary().getName() + " no se puede curar, esta debilitado");
+			System.out.println(trainer.getPrimary().getName() + " no se puede curar, está debilitado");
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("trainer", this.trainer);
+		return modelAndView;
+	}
+
+	@PostMapping("capture")
+	public ModelAndView capture(Trainer trainerForm) {
+		float RNG = (int) ((Math.random() * 40) + 10); //Saca numero entre 10 y 50, sirve para la captura.
+		int LuckyCapture = (int) ((Math.random() * 20)); //Saca numeros del 1 al 20.
+
+		if (LuckyCapture == 1) { //Captura critica, 5% de probabilidad. Da igual que pokeball uses o vida del enemigo que lo puedes capturar por que si.
+			System.out.println("!El pokemon ha sido captura mediante CapturaCrítica!");
+			this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
+		} else {
+			if (RNG * (trainer.getBall().getCapturePower())
+				+ (((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
+					/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) >= trainer.getWildPokemon()
+						.getCaptureRate()) { //Tiene en cuenta el RNG, el tipo de pokeball, la vida perdida y el indice de captura del enemigo.
+				System.out.println("El pokemon ha sido capturado");
+				this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
+			} else
+				System.out.println("El pokemon se ha escapado");
+		}
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);

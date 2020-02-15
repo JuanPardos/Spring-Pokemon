@@ -8,6 +8,7 @@ public class Pokemon {
 	private int maxHP;
 	private String status = "Vivo";
 	private int HP = maxHP;
+	private int captureRate;
 
 	public String getName() {
 		return name;
@@ -44,6 +45,12 @@ public class Pokemon {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public int getCaptureRate() {
+		return captureRate;
+	}
+	public void setCaptureRate(int captureRate) {
+		this.captureRate = captureRate;
 	}
 
 }

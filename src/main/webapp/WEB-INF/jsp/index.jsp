@@ -63,44 +63,64 @@
 	</table>
 	<br />
 	
-	<form:form action="releasePokemon" method="post" modelAttribute="trainer">
-		<form:select path="aux2">
-			<c:set var = "count" scope = "page" value = "0"/>
-			<c:forEach var="item" items="${trainer.team.pokemons}">
-				<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
-				<c:set var="count" value="${count + 1}" scope="page"/>
-			</c:forEach>
-		</form:select>
-		<input type="submit" value="Liberar Pokemon" style="background-color:red" />
-	</form:form>
+	<table>
+		<tr>
+			<td>
+				<form:form action="switchPokemon" method="post" modelAttribute="trainer">
+					<form:select path="aux">
+						<c:set var = "count" scope = "page" value = "0"/>
+						<c:forEach var="item" items="${trainer.team.pokemons}">
+							<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
+							<c:set var="count" value="${count + 1}" scope="page"/>
+						</c:forEach>
+					</form:select>
+					<input type="submit" value="Cambiar pokemon activo" />
+				</form:form>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<form:form action="releasePokemon" method="post" modelAttribute="trainer">
+					<form:select path="aux2">
+						<c:set var = "count" scope = "page" value = "0"/>
+						<c:forEach var="item" items="${trainer.team.pokemons}">
+							<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
+							<c:set var="count" value="${count + 1}" scope="page"/>
+						</c:forEach>
+					</form:select>
+					<input type="submit" value="Liberar Pokemon" style="background-color:red" />
+				</form:form>
+			</td>
+		</tr>
+	</table>
 	
-	<br/><br/>
-	<form:form action="switchPokemon" method="post" modelAttribute="trainer">
-		<form:select path="aux">
-			<c:set var = "count" scope = "page" value = "0"/>
-			<c:forEach var="item" items="${trainer.team.pokemons}">
-				<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
-				<c:set var="count" value="${count + 1}" scope="page"/>
-			</c:forEach>
-		</form:select>
-		<input type="submit" value="Cambiar pokemon activo" />
-	</form:form>
+	<br/><hr><br/>
 	
-	<br/><br/>
+	<table>
+		<tr>
+			<td>
+				<form:form action="createEnemy" method="post" modelAttribute="trainer">
+					<input type="submit" value="Entrar en la hierba alta"/>
+				</form:form>
+			</td>
+			<td>
+				<form:form action="combat" method="post" modelAttribute="trainer">
+					<input type="submit" value="Atacar"/>
+				</form:form>
+			</td>
+			<td>
+				<form:form action="heal" method="post" modelAttribute="trainer">
+					<input type="submit" value="Usar superpoción"/>
+				</form:form>
+			</td>
+			<td>
+				<form:form action="capture" method="post" modelAttribute="trainer">
+					<input type="submit" value="Lanzar pokeball"/>
+				</form:form>
+			</td>
+		</tr>
+	</table>
 	
-	
-	
-	<form:form action="createEnemy" method="post" modelAttribute="trainer">
-		<input type="submit" value="Entrar a la hierba alta"/>
-	</form:form>
-	
-	<form:form action="combat" method="post" modelAttribute="trainer">
-		<input type="submit" value="Combatir"/>
-	</form:form>
-	
-	<form:form action="heal" method="post" modelAttribute="trainer">
-		<input type="submit" value="Usar superpoción"/>
-	</form:form>
 	
 	<br />
  	<a>Pokemon Activo</a><br/><c:out value="${trainer.primary.name}"/> &#8212;
@@ -115,7 +135,8 @@
 	<c:out value="${trainer.wildPokemon.level}"/> Vida: &nbsp;
 	<c:out value="${trainer.wildPokemon.HP}"/> &#47;
 	<c:out value="${trainer.wildPokemon.maxHP}"/> Ataque: &nbsp;
-	<c:out value="${trainer.wildPokemon.attack}"/>
+	<c:out value="${trainer.wildPokemon.attack}"/> 
+	<br/>Indice de captura: <c:out value="${trainer.wildPokemon.captureRate}"/>
 	
 </body>
 </html>
