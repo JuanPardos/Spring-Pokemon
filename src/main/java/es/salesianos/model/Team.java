@@ -7,7 +7,7 @@ public interface Team {
 
 	public boolean isFull();
 	public void addPokemon(Pokemon pokemon);
-	public PokeAttacking setAttackingPokemon(int a);
+	public Pokemon setAttackingPokemon(int a);
 	public void removePokemonById(int b);
 
 }

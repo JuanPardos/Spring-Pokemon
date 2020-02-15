@@ -98,6 +98,10 @@
 		<input type="submit" value="Combatir"/>
 	</form:form>
 	
+	<form:form action="heal" method="post" modelAttribute="trainer">
+		<input type="submit" value="Usar superpoción"/>
+	</form:form>
+	
 	<br />
  	<a>Pokemon Activo</a><br/><c:out value="${trainer.primary.name}"/> &#8212;
 	<c:out value="${trainer.primary.status}"/>&#8212; Nivel: &nbsp;

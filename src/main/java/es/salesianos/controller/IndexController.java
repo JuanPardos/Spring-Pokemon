@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.salesianos.model.Enemy;
-import es.salesianos.model.PokeAttacking;
 import es.salesianos.model.Pokemon;
 import es.salesianos.model.Trainer;
 
@@ -46,7 +44,7 @@ public class IndexController {
 
 		if (!StringUtils.isEmpty(trainerForm.getPokemon())) {
 			Pokemon pokemon = new Pokemon();
-			PokeAttacking weapon = new PokeAttacking();
+			Pokemon weapon = new Pokemon();
 
 			if (trainer.getPrimary() == null) {
 				trainer.setPrimary(weapon);
@@ -60,7 +58,7 @@ public class IndexController {
 			weapon.setLevel(pokemon.getLevel());
 			weapon.setStatus(pokemon.getStatus());
 			weapon.setAttack(pokemon.getAttack());
-			weapon.setHP(pokemon.getHP());
+			weapon.setHP(pokemon.getMaxHP());
 			weapon.setMaxHP(pokemon.getMaxHP());
 
 			this.trainer.setPokemon(pokemon);
@@ -75,29 +73,33 @@ public class IndexController {
 		if (trainerForm.getPokemon().getLevel() > 0 && trainerForm.getPokemon().getLevel() <= 100) {
 			pokemon.setAttack((int) (Math.random() * (10 + (trainerForm.getPokemon().getLevel()) / 2))
 				+ ((trainerForm.getPokemon().getLevel()) / 2) + 1);
-			pokemon.setHP(trainerForm.getPokemon().getLevel() * 4);
-			pokemon.setMaxHP(pokemon.getHP());
+			pokemon.setMaxHP(trainerForm.getPokemon().getLevel() * 4);
+			pokemon.setHP(pokemon.getMaxHP());
 			this.trainer.getTeam().addPokemon(pokemon);
 		} else
 			System.out.println("El nivel del pokemon no es correcto");
 	}
 
-	private void insertEnemy(Trainer trainerForm, Enemy enemyPokemon) {
+	private void insertEnemy(Trainer trainerForm, Pokemon enemyPokemon) {
 		enemyPokemon.setName("Magikarp");
 		enemyPokemon.setLevel((int) (Math.random() * 30) + 70);
 		enemyPokemon.setAttack(
 			(int) (Math.random() * (5 + (enemyPokemon.getLevel()) / 2)) + ((enemyPokemon.getLevel() / 2)) + 1);
-		enemyPokemon.setHP(enemyPokemon.getLevel() * 4);
-		enemyPokemon.setMaxHP(enemyPokemon.getHP());
+		enemyPokemon.setMaxHP(enemyPokemon.getLevel() * 4);
+		enemyPokemon.setHP(enemyPokemon.getMaxHP());
 		enemyPokemon.setStatus("Vivo");
 	}
 
 	@PostMapping("switchPokemon")
 	public ModelAndView switchPokemon(Trainer trainerForm) {
-		PokeAttacking tmp;
+		Pokemon tmp;
 
 		tmp = this.trainer.getPrimary();
-		this.trainer.setPrimary(this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()));
+		if (this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()).getStatus() == "Vivo") {
+			this.trainer.setPrimary(this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()));
+		} else
+			System.out.println("El pokemon esta debilitado, no puede pelear");
+
 		this.trainer.setSecondary(tmp);
 
 		if (this.trainer.getPrimary().getName() != null) {
@@ -120,7 +122,7 @@ public class IndexController {
 
 	@PostMapping("createEnemy")
 	public ModelAndView createEnemy(Trainer trainerForm) {
-		Enemy enemyPokemon = new Enemy();
+		Pokemon enemyPokemon = new Pokemon();
 		trainer.setWildPokemon(enemyPokemon);
 		insertEnemy(trainerForm, enemyPokemon);
 
@@ -147,6 +149,26 @@ public class IndexController {
 			trainer.getWildPokemon().setHP(0);
 			trainer.getWildPokemon().setStatus("Muerto");
 		}
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("trainer", this.trainer);
+		return modelAndView;
+	}
+
+	@PostMapping("heal")
+	public ModelAndView heal(Trainer trainerForm) {
+		if (trainer.getPrimary().getStatus() == "Vivo") {
+			if (trainer.getPrimary().getHP() < trainer.getPrimary().getMaxHP()) {
+				if (trainer.getPrimary().getHP() + 50 > trainer.getPrimary().getMaxHP()) {
+					trainer.getPrimary().setHP(trainer.getPrimary().getMaxHP());
+				} else {
+					trainer.getPrimary().setHP(trainer.getPrimary().getHP() + 50);
+				}
+			} else {
+				System.out.println(trainer.getPrimary().getName() + " no se puede curar, tiene toda la vida");
+			}
+		} else
+			System.out.println(trainer.getPrimary().getName() + " no se puede curar, esta debilitado");
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);

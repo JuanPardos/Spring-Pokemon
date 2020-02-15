@@ -12,10 +12,10 @@ public class Trainer {
 	@Autowired
 	private Team team;
 
-	private PokeAttacking primary;
-	private PokeAttacking secondary;
+	private Pokemon primary;
+	private Pokemon secondary;
 	private Pokemon pokemon;
-	private Enemy wildPokemon;
+	private Pokemon wildPokemon;
 
 	public String getName() {
 		return name;
@@ -29,16 +29,16 @@ public class Trainer {
 	public void setTeam(Team team) {
 		this.team = team;
 	}
-	public PokeAttacking getPrimary() {
+	public Pokemon getPrimary() {
 		return primary;
 	}
-	public void setPrimary(PokeAttacking primary) {
+	public void setPrimary(Pokemon primary) {
 		this.primary = primary;
 	}
-	public PokeAttacking getSecondary() {
+	public Pokemon getSecondary() {
 		return secondary;
 	}
-	public void setSecondary(PokeAttacking secondary) {
+	public void setSecondary(Pokemon secondary) {
 		this.secondary = secondary;
 	}
 	public Pokemon getPokemon() {
@@ -59,10 +59,10 @@ public class Trainer {
 	public void setAux2(int aux2) {
 		this.aux2 = aux2;
 	}
-	public Enemy getWildPokemon() {
+	public Pokemon getWildPokemon() {
 		return wildPokemon;
 	}
-	public void setWildPokemon(Enemy wildPokemon) {
+	public void setWildPokemon(Pokemon wildPokemon) {
 		this.wildPokemon = wildPokemon;
 	}
 

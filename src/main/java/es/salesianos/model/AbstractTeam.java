@@ -30,8 +30,8 @@ public abstract class AbstractTeam implements Team {
 		this.pokemons = pokemons;
 	}
 
-	public PokeAttacking setAttackingPokemon(int a) {
-		PokeAttacking poke = new PokeAttacking();
+	public Pokemon setAttackingPokemon(int a) {
+		Pokemon poke = new Pokemon();
 
 		poke.setAttack(pokemons.get(a).getAttack());
 		poke.setHP(pokemons.get(a).getHP());
