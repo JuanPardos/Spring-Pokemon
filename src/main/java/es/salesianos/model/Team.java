@@ -58,7 +58,7 @@ public class Team {
 
 	public void addPokemon(Pokemon pokemon) {
 		if (isFull()) {
-			System.out.println("Team is full");
+			System.out.println("El equipo esta completo");
 		} else {
 			pokemons.add(pokemon);
 		}

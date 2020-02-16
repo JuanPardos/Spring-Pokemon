@@ -81,11 +81,11 @@ public class IndexController {
 
 	private void insertEnemy(Trainer trainerForm, Pokemon enemyPokemon) {
 		String nombres[] = {"Flygon", "Salamence", "Giratina", "Groudon", "Kyogre", "Rayquaza", "Squirtle", "Charizard",
-			"Smeargle", "Regirock", "Registeel", "Regice", "Giraffarig", "Porygon2", "Lucario", "Raychu", "Necrozma",
-			"Absol"};
+			"Smeargle", "Regirock", "Registeel", "Regice", "Giraffarig", "Porygon2", "Lucario", "Gorka (Shiny)",
+			"Raychu", "Necrozma", "Absol"};
 
 		enemyPokemon.setName(nombres[(int) (Math.random() * nombres.length)]);
-		enemyPokemon.setLevel((int) (Math.random() * 30) + 50);
+		enemyPokemon.setLevel((int) (Math.random() * 60) + 40);
 		enemyPokemon.setAttack(
 			(int) (Math.random() * (5 + (enemyPokemon.getLevel()) / 2)) + ((enemyPokemon.getLevel() / 2)) + 1);
 		enemyPokemon.setMaxHP(enemyPokemon.getLevel() * 4);
@@ -206,13 +206,23 @@ public class IndexController {
 				} else
 					System.out.println("No se puede añadir al equipo, esta completo");
 			} else {
-				System.out.println("El pokemon se ha escapado");
+				if (this.trainer.getPrimary().getStatus() != "Muerto") {
+					System.out.println("El pokemon se ha escapado");
 
-				//Solo para DEBUGG, muestra en consola el valor de captura.
-				System.out.println(RNG * (trainer.getBall().getCapturePower())
-					+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
-						/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.8)
-					+ " < " + trainer.getWildPokemon().getCaptureRate());
+					//Solo para DEBUGG, muestra en consola el valor de captura.
+					System.out.println(RNG * (trainer.getBall().getCapturePower())
+						+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
+							/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.8)
+						+ " < " + trainer.getWildPokemon().getCaptureRate());
+
+					trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
+					if (trainer.getPrimary().getHP() <= 0) {
+						trainer.getPrimary().setHP(0);
+						trainer.getPrimary().setStatus("Muerto");
+					}
+				} else
+					System.out.println("Cambia de pokemon para seguir capturando");
+
 			}
 		}
 
