@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Welcome page</title>
+	<title>Página Principal</title>
 	<link
 		href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css"
 		rel="stylesheet">
@@ -74,7 +74,7 @@
 					<form:select path="aux">
 						<c:set var = "count" scope = "page" value = "0"/>
 						<c:forEach var="item" items="${trainer.team.pokemons}">
-							<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
+							<form:option value="${count}"><c:out value="${item.name} Nv. ${item.level}"/></form:option>
 							<c:set var="count" value="${count + 1}" scope="page"/>
 						</c:forEach>
 					</form:select>
@@ -88,7 +88,7 @@
 					<form:select path="aux2">
 						<c:set var = "count" scope = "page" value = "0"/>
 						<c:forEach var="item" items="${trainer.team.pokemons}">
-							<form:option value="${count}"><c:out value="${item.name} #${count + 1}"/></form:option>
+							<form:option value="${count}"><c:out value="${item.name} Nv. ${item.level}"/></form:option>
 							<c:set var="count" value="${count + 1}" scope="page"/>
 						</c:forEach>
 					</form:select>
@@ -97,8 +97,9 @@
 			</td>
 		</tr>
 	</table>
+	<img src="https://preview.redd.it/rskneik2r4h41.jpg?width=640&height=804&crop=smart&auto=webp&s=8ad35f9722888c349c6d011389aa8fbcf5f051c5" style="position:absolute; right: 50px; top:25px; z-index: -1">
 	
-	<br/><hr><br/>
+	<br/><br/>
 	
 	<table>
 		<tr>

@@ -36,9 +36,9 @@ public class Team {
 		Pokemon poke = new Pokemon();
 
 		poke.setAttack(pokemons.get(a).getAttack());
-		poke.setHP(pokemons.get(a).getHP());
 		poke.setLevel(pokemons.get(a).getLevel());
 		poke.setMaxHP(pokemons.get(a).getMaxHP());
+		poke.setHP(pokemons.get(a).getHP());
 		poke.setName(pokemons.get(a).getName());
 		poke.setStatus(pokemons.get(a).getStatus());
 

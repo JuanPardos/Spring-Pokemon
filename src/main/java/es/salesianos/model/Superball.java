@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class Superball extends AbstractPokeball {
 
 	public Superball() {
-		capturePower = (float) 0.85;
+		capturePower = (float) 0.825;
 	}
 }
