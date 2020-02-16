@@ -5,14 +5,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Welcome page</title>
-<link
-	href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css"
-	rel="stylesheet">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Welcome page</title>
+	<link
+		href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css"
+		rel="stylesheet">
 </head>
 <body style="margin-left:10px">
-
+	<audio controls loop style="display: block; margin-left: auto; margin-right: auto">
+		<source src="http://23.237.126.42/ost/pokemon-ruby-sapphire-music-super-complete/ktnxrati/1-09%20Battle%21%20Wild%20Pok%C3%A9mon.mp3" type="audio/mpeg">
+				  
+				  Your browser does not support the audio tag.
+	</audio>
 	<form:form action="insert" method="post" modelAttribute="trainer">
 		<span>Nombre Entrenador:</span>
 		<form:input type="text" path="name" />

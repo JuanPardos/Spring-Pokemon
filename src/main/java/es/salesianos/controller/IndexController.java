@@ -82,7 +82,7 @@ public class IndexController {
 
 	private void insertEnemy(Trainer trainerForm, Pokemon enemyPokemon) {
 		String nombres[] = {"Flygon", "Salamence", "Giratina", "Groudon", "Kyogre", "Rayquaza", "Squirtle", "Charizard",
-			"Smeargle", "Regirock", "Registeel", "Regice", "Giraffarig", "Porygon2", "Lucario", "Raychu"};
+			"Smeargle", "Regirock", "Registeel", "Regice", "Giraffarig", "Porygon2", "Lucario", "Raychu", "Necrozma"};
 
 		enemyPokemon.setName(nombres[(int) (Math.random() * nombres.length)]);
 		enemyPokemon.setLevel((int) (Math.random() * 30) + 50);
@@ -152,6 +152,8 @@ public class IndexController {
 		if (trainer.getWildPokemon().getHP() <= 0) {
 			trainer.getWildPokemon().setHP(0);
 			trainer.getWildPokemon().setStatus("Muerto");
+			System.out.println("Has debilitado al pokemon enemigo !");
+			createEnemy(trainerForm);
 		}
 
 		ModelAndView modelAndView = new ModelAndView("index");
@@ -187,6 +189,7 @@ public class IndexController {
 		if (LuckyCapture == 1) { //Captura critica, 5% de probabilidad. Da igual que pokeball uses o vida del enemigo que lo puedes capturar por que si.
 			System.out.println("!El pokemon ha sido captura mediante CapturaCrítica!");
 			this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
+			createEnemy(trainerForm);
 		} else {
 			if (RNG * (trainer.getBall().getCapturePower())
 				+ (((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
@@ -194,8 +197,16 @@ public class IndexController {
 						.getCaptureRate()) { //Tiene en cuenta el RNG, el tipo de pokeball, la vida perdida y el indice de captura del enemigo.
 				System.out.println("El pokemon ha sido capturado");
 				this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
-			} else
+				createEnemy(trainerForm);
+			} else {
 				System.out.println("El pokemon se ha escapado");
+
+				//DEBUGG, muestra en consola las variables de captura.
+				System.out.println(RNG * (trainer.getBall().getCapturePower())
+					+ (((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
+						/ (float) (trainer.getWildPokemon().getMaxHP())) * 100)
+					+ " < " + trainer.getWildPokemon().getCaptureRate());
+			}
 		}
 
 		ModelAndView modelAndView = new ModelAndView("index");
