@@ -8,6 +8,7 @@ public class Trainer {
 	private String name;
 	private int aux;
 	private int aux2;
+	private String feedback;
 
 	@Autowired
 	private Team team;
@@ -73,6 +74,12 @@ public class Trainer {
 	}
 	public void setBall(Ball ball) {
 		this.ball = ball;
+	}
+	public String getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
 	}
 
 }

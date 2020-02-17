@@ -15,9 +15,10 @@ import es.salesianos.model.Trainer;
 
 @Controller
 public class IndexController {
+	private int contSleep = 0;
 	private static Logger log = LogManager.getLogger(IndexController.class);
 	private double multiplier = 1.0;
-	private int aux3; //Se usa para actualizar la tabla cuando los pokemons reciben daño.
+	private int aux3; //Se usa para actualizar la tabla cuando el pokemon en combate recibe daño.
 
 	@Autowired
 	private Trainer trainer;
@@ -80,7 +81,7 @@ public class IndexController {
 			pokemon.setHP(pokemon.getMaxHP());
 			this.trainer.getTeam().addPokemon(pokemon);
 		} else
-			System.out.println("El nivel del pokemon no es correcto");
+			trainer.setFeedback("El nivel del pokemon no es correcto, 1 al 100");
 	}
 
 	private void insertEnemy(Trainer trainerForm, Pokemon enemyPokemon) {
@@ -96,7 +97,7 @@ public class IndexController {
 			(int) (Math.random() * (5 + (enemyPokemon.getLevel()) / 2)) + ((enemyPokemon.getLevel() / 2)) + 1);
 		enemyPokemon.setMaxHP(enemyPokemon.getLevel() * 4);
 		enemyPokemon.setHP(enemyPokemon.getMaxHP());
-		enemyPokemon.setCaptureRate((int) (Math.random() * 40) + 70); //Valores entre 70 y 110.
+		enemyPokemon.setCaptureRate((int) (Math.random() * 40) + 75); //Valores entre 75 y 115.
 		enemyPokemon.setStatus("Vivo");
 		enemyPokemon.setType(tipos[(int) (Math.random() * 3)]);
 	}
@@ -110,7 +111,7 @@ public class IndexController {
 		if (this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()).getStatus() == "Vivo") {
 			this.trainer.setPrimary(this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()));
 		} else
-			System.out.println("El pokemon esta debilitado, no puede pelear");
+			trainer.setFeedback("El pokemon está debilitado, no puede pelear");
 
 		this.trainer.setSecondary(tmp);
 
@@ -150,12 +151,15 @@ public class IndexController {
 		if (trainer.getPrimary().getStatus() == "Vivo") {
 			trainer.getWildPokemon()
 				.setHP(trainer.getWildPokemon().getHP() - (int) ((trainer.getPrimary().getAttack()) * multiplier));
-			trainer.getPrimary().setHP(
-				trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * (1 / multiplier)));
+
+			if (trainer.getWildPokemon().getStatus() != "Durmiendo") {
+				trainer.getPrimary().setHP(
+					trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * (1 / multiplier)));
+			}
 
 			trainer.getTeam().getPokemons().get(aux3).setHP(trainer.getPrimary().getHP()); //Actualiza la tabla.
 		} else {
-			System.out.println(trainer.getPrimary().getName() + " no puede combatir");
+			trainer.setFeedback(trainer.getPrimary().getName() + " no puede combatir");
 		}
 
 		if (trainer.getPrimary().getHP() <= 0) {
@@ -165,14 +169,21 @@ public class IndexController {
 			trainer.getPrimary().setStatus("Muerto");
 		}
 
+		contSleep += 1;
+		if (contSleep < 4) {
+			trainer.setFeedback("El pokemon salvaje no puede atacar porque esta durmiendo");
+		} else {
+			contSleep = 0;
+			trainer.getWildPokemon().setStatus("Vivo");
+			trainer.setFeedback("! El pokemon salvaje se ha despertado !");
+		}
+
 		if (trainer.getWildPokemon().getHP() <= 0) {
 			trainer.getWildPokemon().setHP(0);
 			trainer.getWildPokemon().setStatus("Muerto");
-			System.out.println("Has debilitado al pokemon enemigo !");
+			trainer.setFeedback(trainer.getWildPokemon().getName() + " se ha debilitado");
 			createEnemy(trainerForm);
 		}
-
-		System.out.println(multiplier);
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
@@ -187,7 +198,7 @@ public class IndexController {
 				.setHP(trainer.getWildPokemon().getHP() - (int) (trainer.getPrimary().getAttack() * 0.8)); //FalsoTortazo es un 20% menos potente que un ataque normal
 			trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
 		} else {
-			System.out.println(trainer.getPrimary().getName() + " no puede combatir");
+			trainer.setFeedback(trainer.getPrimary().getName() + " no puede combatir");
 		}
 
 		if (trainer.getPrimary().getHP() <= 0) {
@@ -210,14 +221,16 @@ public class IndexController {
 			if (trainer.getPrimary().getHP() < trainer.getPrimary().getMaxHP()) {
 				if (trainer.getPrimary().getHP() + 50 > trainer.getPrimary().getMaxHP()) {
 					trainer.getPrimary().setHP(trainer.getPrimary().getMaxHP());
+					trainer.setFeedback(trainer.getPrimary().getName() + " se ha curado 50 HP");
 				} else {
 					trainer.getPrimary().setHP(trainer.getPrimary().getHP() + 50);
+					trainer.setFeedback(trainer.getPrimary().getName() + " se ha curado 50 HP");
 				}
 			} else {
-				System.out.println(trainer.getPrimary().getName() + " no se puede curar, tiene toda la vida");
+				trainer.setFeedback(trainer.getPrimary().getName() + " no se puede curar, tiene toda la vida");
 			}
 		} else
-			System.out.println(trainer.getPrimary().getName() + " no se puede curar, está debilitado");
+			trainer.setFeedback(trainer.getPrimary().getName() + " no se puede curar, está debilitado");
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
@@ -226,36 +239,38 @@ public class IndexController {
 
 	@PostMapping("capture")
 	public ModelAndView capture(Trainer trainerForm) {
+		int tempCapture = trainer.getWildPokemon().getCaptureRate(); //Auxiliar para guardar indice de captura, se usa si el pokemon esta dormido.
 		float RNG = (int) ((Math.random() * 50) + 20); //Saca numero entre 20 y 70, sirve para la captura.
 		int LuckyCapture = (int) ((Math.random() * 25)); //Numeros del 1 al 25.
 
+		if (trainer.getWildPokemon().getStatus() == "Durmiendo") {
+			trainer.getWildPokemon().setCaptureRate((int) (trainer.getWildPokemon().getCaptureRate() * 0.9));
+		} else {
+			trainer.getWildPokemon().setCaptureRate(tempCapture);
+		}
+
 		if (LuckyCapture == 1) { //Captura critica, 4% de probabilidad. Sin importar que pokeball uses o vida del enemigo que lo puedes capturar.
-			System.out.println("!El pokemon ha sido captura mediante Captura Crítica! ");
+			trainer.setFeedback(trainer.getWildPokemon().getName() + " ha sido capturado mediante Captura Crítica! ");
 			if (!trainer.getTeam().isFull()) {
 				this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
 				createEnemy(trainerForm);
 			} else
-				System.out.println("No se puede añadir al equipo, esta completo");
+				trainer.setFeedback("No se puede añadir al equipo, esta completo");
 		} else {
 			if (RNG * (trainer.getBall().getCapturePower())
 				+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
 					/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.7) >= trainer.getWildPokemon()
 						.getCaptureRate()) { //Tiene en cuenta el RNG, el tipo de pokeball, la vida perdida y el indice de captura del enemigo.
-				System.out.println("El pokemon ha sido capturado");
+
+				trainer.setFeedback(trainer.getWildPokemon().getName() + " ha sido capturado");
 				if (!trainer.getTeam().isFull()) {
 					this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
 					createEnemy(trainerForm);
 				} else
-					System.out.println("No se puede añadir al equipo, esta completo");
+					trainer.setFeedback("No se puede añadir al equipo, esta completo");
 			} else {
 				if (this.trainer.getPrimary().getStatus() != "Muerto") {
-					System.out.println("El pokemon se ha escapado");
-
-					//Solo para DEBUGG, muestra en consola el valor de captura.
-					System.out.println(RNG * (trainer.getBall().getCapturePower())
-						+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
-							/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.7)
-						+ " < " + trainer.getWildPokemon().getCaptureRate());
+					trainer.setFeedback("El pokemon se ha escapado");
 
 					trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
 					if (trainer.getPrimary().getHP() <= 0) {
@@ -263,7 +278,29 @@ public class IndexController {
 						trainer.getPrimary().setStatus("Muerto");
 					}
 				} else
-					System.out.println("Cambia de pokemon para seguir capturando");
+					trainer.setFeedback("Cambia de pokemon para seguir capturando");
+			}
+		}
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("trainer", this.trainer);
+		return modelAndView;
+	}
+
+	@PostMapping("sleep")
+	public ModelAndView sleep(Trainer trainerForm) {
+		int random = (int) (Math.random() * 100); //Aleatorio para dormir.
+		if (random >= 40 && trainer.getWildPokemon().getStatus() != "Durmiendo") {
+			trainer.getWildPokemon().setStatus("Durmiendo");
+			contSleep += 1;
+			trainer.setFeedback(trainer.getWildPokemon().getName() + " se ha puesto a dormir");
+		} else {
+			if (random <= 40) {
+				trainer.setFeedback("El somnífero ha fallado");
+				trainer.getPrimary().setHP(
+					trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * (1 / multiplier)));
+			} else {
+				trainer.setFeedback("El pokemon ya se encuentra dormido");
 			}
 		}
 
@@ -308,4 +345,5 @@ public class IndexController {
 		}
 
 	}
+
 }

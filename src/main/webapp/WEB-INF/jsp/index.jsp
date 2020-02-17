@@ -125,6 +125,11 @@
 						<input type="submit" value="⚔️ Ataque tipo <c:out value="${trainer.primary.type}"/> ⚔️"/>
 					</form:form>
 				</td>
+				<td>
+					<form:form action="sleep" method="post" modelAttribute="trainer" title="Atacar con Somnífero, 60% prob. Facilita la captura.">
+						<input type="submit" value="💤️ Usar somnífero 💤️"/>
+					</form:form>
+				</td>
 			</tr>
 			<tr>
 				<td>
@@ -138,7 +143,7 @@
 					</form:form>
 				</td>
 				<td>
-					<button onclick="alert('OFERTON de Lanzamiento: 1xMasterBall=4.99$.  2xMasterBall=9.99$')">💰️ Comprar MasterBall 💰️</button>
+					<button onclick="alert('OFERTON de Lanzamiento: 1xMasterBall=4.99$  2xMasterBall=9.99$  3xMasterBall=14.99$  ...')">💰️ Comprar MasterBall 💰️</button>
 				</td>
 			</tr>
 		</table>
@@ -155,7 +160,7 @@
 	 	<c:if test="${trainer.primary.type == 'Agua'}">
 	 		<a style="color: aqua"><c:out value="${trainer.primary.type}"/></a>
 	 	</c:if>&#8212;
-		<c:out value="${trainer.primary.status}"/>&#8212; Nivel: &nbsp;
+		<c:out value="${trainer.primary.status}"/>&#8212; Nivel:
 		<c:out value="${trainer.primary.level}"/> Vida: &nbsp;
 		<c:out value="${trainer.primary.HP}"/> &#47;
 		<c:out value="${trainer.primary.maxHP}"/> Ataque: &nbsp;
@@ -171,11 +176,17 @@
 	 	<c:if test="${trainer.wildPokemon.type == 'Planta'}">
 	 		<a style="color: #97ff00"><c:out value="${trainer.wildPokemon.type}"/></a>
 	 	</c:if>&#8212;
-		Nivel: &nbsp;<c:out value="${trainer.wildPokemon.level}"/> Vida: &nbsp;
+		Nivel: <c:out value="${trainer.wildPokemon.level}"/> Vida: &nbsp;
 		<c:out value="${trainer.wildPokemon.HP}"/> &#47;
 		<c:out value="${trainer.wildPokemon.maxHP}"/> Ataque: &nbsp;
 		<c:out value="${trainer.wildPokemon.attack}"/> 
-		<br/>Indice de captura: <c:out value="${trainer.wildPokemon.captureRate}"/>
+		<br/>Indice de captura: <c:out value="${trainer.wildPokemon.captureRate}"/>&nbsp;
+		<c:if test="${trainer.wildPokemon.status == 'Durmiendo'}">
+	 		<a style="color: gold">*DURMIENDO*</a>
+	 	</c:if>
+		<br/>
+		<h2>INFO:</h2>
+		<c:out value="${trainer.feedback}"/>
 	</b>
 	<img src="https://preview.redd.it/rskneik2r4h41.jpg?width=640&height=804&crop=smart&auto=webp&s=8ad35f9722888c349c6d011389aa8fbcf5f051c5" width="445px" height="560px" style="position:absolute; right: 25px; top:25px; z-index: -1">
 	<!--<img src="https://i.kym-cdn.com/entries/icons/mobile/000/028/021/work.jpg" width="380px" height="240px" style="position:absolute; left:25px; bottom: 25px; z-index: -1"> -->
