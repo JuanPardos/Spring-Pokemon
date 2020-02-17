@@ -9,6 +9,7 @@ public class Pokemon {
 	private String status = "Vivo";
 	private int HP = maxHP;
 	private int captureRate;
+	private String type;
 
 	public String getName() {
 		return name;
@@ -51,6 +52,12 @@ public class Pokemon {
 	}
 	public void setCaptureRate(int captureRate) {
 		this.captureRate = captureRate;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

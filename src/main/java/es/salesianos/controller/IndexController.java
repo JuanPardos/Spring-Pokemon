@@ -14,7 +14,7 @@ import es.salesianos.model.Trainer;
 
 @Controller
 public class IndexController {
-
+	double multiplier = 1.0;
 	private static Logger log = LogManager.getLogger(IndexController.class);
 
 	@Autowired
@@ -54,6 +54,7 @@ public class IndexController {
 			}
 
 			weapon.setName(pokemon.getName());
+			weapon.setType(pokemon.getType());
 			weapon.setLevel(pokemon.getLevel());
 			weapon.setStatus(pokemon.getStatus());
 			weapon.setAttack(pokemon.getAttack());
@@ -68,6 +69,7 @@ public class IndexController {
 		pokemon.setName(trainerForm.getPokemon().getName());
 		pokemon.setLevel(trainerForm.getPokemon().getLevel());
 		pokemon.setStatus(trainerForm.getPokemon().getStatus());
+		pokemon.setType(trainerForm.getPokemon().getType());
 
 		if (trainerForm.getPokemon().getLevel() > 0 && trainerForm.getPokemon().getLevel() <= 100) {
 			pokemon.setAttack((int) (Math.random() * (10 + (trainerForm.getPokemon().getLevel()) / 2))
@@ -84,6 +86,8 @@ public class IndexController {
 			"Smeargle", "Regirock", "Registeel", "Regice", "Giraffarig", "Porygon2", "Lucario", "Gorka (Shiny)",
 			"Raychu", "Necrozma", "Absol"};
 
+		String tipos[] = {"Agua", "Fuego", "Planta"};
+
 		enemyPokemon.setName(nombres[(int) (Math.random() * nombres.length)]);
 		enemyPokemon.setLevel((int) (Math.random() * 60) + 40);
 		enemyPokemon.setAttack(
@@ -92,6 +96,7 @@ public class IndexController {
 		enemyPokemon.setHP(enemyPokemon.getMaxHP());
 		enemyPokemon.setCaptureRate((int) (Math.random() * 40) + 70); //Valores entre 70 y 110.
 		enemyPokemon.setStatus("Vivo");
+		enemyPokemon.setType(tipos[(int) (Math.random() * 3)]);
 	}
 
 	@PostMapping("switchPokemon")
@@ -138,9 +143,12 @@ public class IndexController {
 
 	@PostMapping("combat")
 	public ModelAndView combat(Trainer trainerForm) {
+		getCombatMultiplier();
 		if (trainer.getPrimary().getStatus() == "Vivo") {
-			trainer.getWildPokemon().setHP(trainer.getWildPokemon().getHP() - trainer.getPrimary().getAttack());
-			trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
+			trainer.getWildPokemon()
+				.setHP(trainer.getWildPokemon().getHP() - (int) ((trainer.getPrimary().getAttack()) * multiplier));
+			trainer.getPrimary().setHP(
+				trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * (1 / multiplier)));
 		} else {
 			System.out.println(trainer.getPrimary().getName() + " no puede combatir");
 		}
@@ -155,6 +163,33 @@ public class IndexController {
 			trainer.getWildPokemon().setStatus("Muerto");
 			System.out.println("Has debilitado al pokemon enemigo !");
 			createEnemy(trainerForm);
+		}
+
+		System.out.println(multiplier);
+
+		ModelAndView modelAndView = new ModelAndView("index");
+		modelAndView.addObject("trainer", this.trainer);
+
+		return modelAndView;
+	}
+
+	@PostMapping("falseAttack")
+	public ModelAndView falseAttack(Trainer trainerForm) {
+		if (trainer.getPrimary().getStatus() == "Vivo") {
+			trainer.getWildPokemon()
+				.setHP(trainer.getWildPokemon().getHP() - (int) (trainer.getPrimary().getAttack() * 0.8)); //FalsoTortazo es un 20% menos potente que un ataque normal
+			trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
+		} else {
+			System.out.println(trainer.getPrimary().getName() + " no puede combatir");
+		}
+
+		if (trainer.getPrimary().getHP() <= 0) {
+			trainer.getPrimary().setHP(0);
+			trainer.getPrimary().setStatus("Muerto");
+		}
+
+		if (trainer.getWildPokemon().getHP() <= 0) {
+			trainer.getWildPokemon().setHP(1);
 		}
 
 		ModelAndView modelAndView = new ModelAndView("index");
@@ -184,11 +219,11 @@ public class IndexController {
 
 	@PostMapping("capture")
 	public ModelAndView capture(Trainer trainerForm) {
-		float RNG = (int) ((Math.random() * 60) + 10); //Saca numero entre 10 y 70, sirve para la captura.
-		int LuckyCapture = (int) ((Math.random() * 20)); //Numeros del 1 al 20.
+		float RNG = (int) ((Math.random() * 50) + 20); //Saca numero entre 20 y 70, sirve para la captura.
+		int LuckyCapture = (int) ((Math.random() * 25)); //Numeros del 1 al 25.
 
-		if (LuckyCapture == 1) { //Captura critica, 5% de probabilidad. Sin importar que pokeball uses o vida del enemigo que lo puedes capturar.
-			System.out.println("!El pokemon ha sido captura mediante CapturaCrítica! ");
+		if (LuckyCapture == 1) { //Captura critica, 4% de probabilidad. Sin importar que pokeball uses o vida del enemigo que lo puedes capturar.
+			System.out.println("!El pokemon ha sido captura mediante Captura Crítica! ");
 			if (!trainer.getTeam().isFull()) {
 				this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
 				createEnemy(trainerForm);
@@ -197,7 +232,7 @@ public class IndexController {
 		} else {
 			if (RNG * (trainer.getBall().getCapturePower())
 				+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
-					/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.8) >= trainer.getWildPokemon()
+					/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.7) >= trainer.getWildPokemon()
 						.getCaptureRate()) { //Tiene en cuenta el RNG, el tipo de pokeball, la vida perdida y el indice de captura del enemigo.
 				System.out.println("El pokemon ha sido capturado");
 				if (!trainer.getTeam().isFull()) {
@@ -212,7 +247,7 @@ public class IndexController {
 					//Solo para DEBUGG, muestra en consola el valor de captura.
 					System.out.println(RNG * (trainer.getBall().getCapturePower())
 						+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
-							/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.8)
+							/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.7)
 						+ " < " + trainer.getWildPokemon().getCaptureRate());
 
 					trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
@@ -222,7 +257,6 @@ public class IndexController {
 					}
 				} else
 					System.out.println("Cambia de pokemon para seguir capturando");
-
 			}
 		}
 
@@ -231,4 +265,46 @@ public class IndexController {
 		return modelAndView;
 	}
 
+	//NO FUNCIONA !
+	private void getCombatMultiplier() {
+		if (trainer.getPrimary().getType() == "Fuego") {
+			switch (trainer.getWildPokemon().getType()) {
+				case "Fuego" :
+					multiplier = 0.5;
+					break;
+				case "Planta" :
+					multiplier = 0.5;
+					break;
+				case "Agua" :
+					multiplier = 0.5;
+					break;
+			}
+		}
+		if (trainer.getPrimary().getType() == "Planta") {
+			switch (trainer.getWildPokemon().getType()) {
+				case "Fuego" :
+					multiplier = 0.5;
+					break;
+				case "Planta" :
+					multiplier = 0.5;
+					break;
+				case "Agua" :
+					multiplier = 2.0;
+					break;
+			}
+		}
+		if (trainer.getPrimary().getType() == "Agua") {
+			switch (trainer.getWildPokemon().getType()) {
+				case "Fuego" :
+					multiplier = 2.0;
+					break;
+				case "Planta" :
+					multiplier = 0.5;
+					break;
+				case "Agua" :
+					multiplier = 0.5;
+					break;
+			}
+		}
+	}
 }

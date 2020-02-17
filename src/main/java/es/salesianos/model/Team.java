@@ -40,6 +40,7 @@ public class Team {
 		poke.setMaxHP(pokemons.get(a).getMaxHP());
 		poke.setHP(pokemons.get(a).getHP());
 		poke.setName(pokemons.get(a).getName());
+		poke.setType(pokemons.get(a).getType());
 		poke.setStatus(pokemons.get(a).getStatus());
 
 		return poke;
