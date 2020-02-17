@@ -2,6 +2,7 @@ package es.salesianos.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.internal.compiler.ast.BreakStatement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -14,8 +15,9 @@ import es.salesianos.model.Trainer;
 
 @Controller
 public class IndexController {
-	double multiplier = 1.0;
 	private static Logger log = LogManager.getLogger(IndexController.class);
+	private double multiplier = 1.0;
+	private int aux3; //Se usa para actualizar la tabla cuando los pokemons reciben daño.
 
 	@Autowired
 	private Trainer trainer;
@@ -102,6 +104,7 @@ public class IndexController {
 	@PostMapping("switchPokemon")
 	public ModelAndView switchPokemon(Trainer trainerForm) {
 		Pokemon tmp;
+		aux3 = trainerForm.getAux();
 
 		tmp = this.trainer.getPrimary();
 		if (this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()).getStatus() == "Vivo") {
@@ -149,11 +152,15 @@ public class IndexController {
 				.setHP(trainer.getWildPokemon().getHP() - (int) ((trainer.getPrimary().getAttack()) * multiplier));
 			trainer.getPrimary().setHP(
 				trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * (1 / multiplier)));
+
+			trainer.getTeam().getPokemons().get(aux3).setHP(trainer.getPrimary().getHP()); //Actualiza la tabla.
 		} else {
 			System.out.println(trainer.getPrimary().getName() + " no puede combatir");
 		}
 
 		if (trainer.getPrimary().getHP() <= 0) {
+			trainer.getTeam().getPokemons().get(aux3).setHP(0);
+			trainer.getTeam().getPokemons().get(aux3).setStatus("Muerto");
 			trainer.getPrimary().setHP(0);
 			trainer.getPrimary().setStatus("Muerto");
 		}
@@ -266,45 +273,39 @@ public class IndexController {
 	}
 
 	//NO FUNCIONA !
-	private void getCombatMultiplier() {
-		if (trainer.getPrimary().getType() == "Fuego") {
-			switch (trainer.getWildPokemon().getType()) {
-				case "Fuego" :
-					multiplier = 0.5;
-					break;
-				case "Planta" :
-					multiplier = 0.5;
-					break;
-				case "Agua" :
-					multiplier = 0.5;
-					break;
-			}
-		}
-		if (trainer.getPrimary().getType() == "Planta") {
-			switch (trainer.getWildPokemon().getType()) {
-				case "Fuego" :
-					multiplier = 0.5;
-					break;
-				case "Planta" :
-					multiplier = 0.5;
-					break;
+	public void getCombatMultiplier() {
+		if (this.trainer.getPrimary().getType() == "Planta") {
+			switch (this.trainer.getWildPokemon().getType()) {
 				case "Agua" :
 					multiplier = 2.0;
 					break;
+				default :
+					multiplier = 0.5;
+					break;
 			}
 		}
-		if (trainer.getPrimary().getType() == "Agua") {
-			switch (trainer.getWildPokemon().getType()) {
+
+		if (this.trainer.getPrimary().getType() == "Fuego") {
+			switch (this.trainer.getWildPokemon().getType()) {
+				case "Planta" :
+					multiplier = 2.0;
+					break;
+				default :
+					multiplier = 0.5;
+					break;
+			}
+		}
+
+		if (this.trainer.getPrimary().getType() == "Agua") {
+			switch (this.trainer.getWildPokemon().getType()) {
 				case "Fuego" :
 					multiplier = 2.0;
 					break;
-				case "Planta" :
-					multiplier = 0.5;
-					break;
-				case "Agua" :
+				default :
 					multiplier = 0.5;
 					break;
 			}
 		}
+
 	}
 }

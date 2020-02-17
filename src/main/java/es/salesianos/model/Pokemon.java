@@ -7,7 +7,7 @@ public class Pokemon {
 	private int attack;
 	private int maxHP;
 	private String status = "Vivo";
-	private int HP = maxHP;
+	private int HP;
 	private int captureRate;
 	private String type;
 

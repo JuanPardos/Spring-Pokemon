@@ -125,6 +125,8 @@
 						<input type="submit" value="⚔️ Ataque tipo <c:out value="${trainer.primary.type}"/> ⚔️"/>
 					</form:form>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<form:form action="falseAttack" method="post" modelAttribute="trainer" title="Ataca con FalsoTortazo, ataque menos potente que no debilita al enemigo">
 						<input type="submit" value="🗡️ Atacar (FalsoTortazo) 🗡️"/>
@@ -136,7 +138,7 @@
 					</form:form>
 				</td>
 				<td>
-					<button onclick="alert('OFERTON de Lanzamiento: 1xMasterBall=4.99$.  2xMasterBall=9.99$')">Comprar MasterBall</button>
+					<button onclick="alert('OFERTON de Lanzamiento: 1xMasterBall=4.99$.  2xMasterBall=9.99$')">💰️ Comprar MasterBall 💰️</button>
 				</td>
 			</tr>
 		</table>
@@ -175,7 +177,7 @@
 		<c:out value="${trainer.wildPokemon.attack}"/> 
 		<br/>Indice de captura: <c:out value="${trainer.wildPokemon.captureRate}"/>
 	</b>
-	<!-- <img src="https://preview.redd.it/rskneik2r4h41.jpg?width=640&height=804&crop=smart&auto=webp&s=8ad35f9722888c349c6d011389aa8fbcf5f051c5" width="445px" height="560px" style="position:absolute; right: 25px; top:25px; z-index: -1">
-	<img src="https://i.kym-cdn.com/entries/icons/mobile/000/028/021/work.jpg" width="380px" height="240px" style="position:absolute; left:25px; bottom: 25px; z-index: -1"> -->
+	<img src="https://preview.redd.it/rskneik2r4h41.jpg?width=640&height=804&crop=smart&auto=webp&s=8ad35f9722888c349c6d011389aa8fbcf5f051c5" width="445px" height="560px" style="position:absolute; right: 25px; top:25px; z-index: -1">
+	<!--<img src="https://i.kym-cdn.com/entries/icons/mobile/000/028/021/work.jpg" width="380px" height="240px" style="position:absolute; left:25px; bottom: 25px; z-index: -1"> -->
 </body>
 </html>
