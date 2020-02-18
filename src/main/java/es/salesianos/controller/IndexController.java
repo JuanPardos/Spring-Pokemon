@@ -167,8 +167,10 @@ public class IndexController {
 			trainer.getPrimary().setHP(0);
 			trainer.getPrimary().setStatus("Muerto");
 		}
-
-		contSleep += 1;
+		
+		if(trainer.getWildPokemon().getStatus() == "Durmiendo") {
+			contSleep += 1;
+		}
 		if (contSleep < 4 && trainer.getWildPokemon().getStatus() == "Durmiendo") {
 			trainer.setFeedback("El pokemon salvaje no puede atacar porque esta durmiendo");
 		} else {
