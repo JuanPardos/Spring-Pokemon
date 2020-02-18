@@ -2,7 +2,6 @@ package es.salesianos.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jdt.internal.compiler.ast.BreakStatement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -99,7 +98,7 @@ public class IndexController {
 		enemyPokemon.setHP(enemyPokemon.getMaxHP());
 		enemyPokemon.setCaptureRate((int) (Math.random() * 40) + 75); //Valores entre 75 y 115.
 		enemyPokemon.setStatus("Vivo");
-		enemyPokemon.setType(tipos[(int) (Math.random() * 3)]);
+		enemyPokemon.setType(tipos[(int) (Math.random() * tipos.length)]);
 	}
 
 	@PostMapping("switchPokemon")
@@ -170,7 +169,7 @@ public class IndexController {
 		}
 
 		contSleep += 1;
-		if (contSleep < 4) {
+		if (contSleep < 4 && trainer.getWildPokemon().getStatus() == "Durmiendo") {
 			trainer.setFeedback("El pokemon salvaje no puede atacar porque esta durmiendo");
 		} else {
 			contSleep = 0;
