@@ -167,8 +167,8 @@ public class IndexController {
 			trainer.getPrimary().setHP(0);
 			trainer.getPrimary().setStatus("Muerto");
 		}
-		
-		if(trainer.getWildPokemon().getStatus() == "Durmiendo") {
+
+		if (trainer.getWildPokemon().getStatus() == "Durmiendo") {
 			contSleep += 1;
 		}
 		if (contSleep < 4 && trainer.getWildPokemon().getStatus() == "Durmiendo") {
@@ -176,7 +176,6 @@ public class IndexController {
 		} else {
 			contSleep = 0;
 			trainer.getWildPokemon().setStatus("Vivo");
-			trainer.setFeedback("! El pokemon salvaje se ha despertado !");
 		}
 
 		if (trainer.getWildPokemon().getHP() <= 0) {
@@ -210,6 +209,9 @@ public class IndexController {
 		if (trainer.getWildPokemon().getHP() <= 0) {
 			trainer.getWildPokemon().setHP(1);
 		}
+		if (trainer.getWildPokemon().getStatus() == "Durmiendo") {
+			contSleep += 1;
+		}
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
@@ -232,6 +234,10 @@ public class IndexController {
 			}
 		} else
 			trainer.setFeedback(trainer.getPrimary().getName() + " no se puede curar, está debilitado");
+
+		if (trainer.getWildPokemon().getStatus() == "Durmiendo") {
+			contSleep += 1;
+		}
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
@@ -273,7 +279,10 @@ public class IndexController {
 				if (this.trainer.getPrimary().getStatus() != "Muerto") {
 					trainer.setFeedback("El pokemon se ha escapado");
 
-					trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
+					if (trainer.getWildPokemon().getStatus() != "Muerto"
+						|| trainer.getWildPokemon().getStatus() != "Durmiendo") {
+						trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
+					}
 					if (trainer.getPrimary().getHP() <= 0) {
 						trainer.getPrimary().setHP(0);
 						trainer.getPrimary().setStatus("Muerto");

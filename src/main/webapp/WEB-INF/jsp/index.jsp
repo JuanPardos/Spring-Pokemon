@@ -138,10 +138,17 @@
 					</form:form>
 				</td>
 				<td>
-					<form:form action="capture" method="post" modelAttribute="trainer" title="Lanza la pokeball segun el profile en uso">
-						<input type="submit" value="⭕️ Lanzar pokeball ⭕️"/>
-					</form:form>
-				</td>
+					<c:if test="${trainer.wildPokemon.HP >= trainer.wildPokemon.maxHP*0.25}">
+				 		<form:form action="capture" method="post" modelAttribute="trainer" title="Lanza la pokeball segun el profile en uso">
+							<input type="submit" value="⭕️ Lanzar pokeball ⭕️" disabled="disabled"/>
+						</form:form>
+				 	</c:if>
+				 	<c:if test="${trainer.wildPokemon.HP <= trainer.wildPokemon.maxHP*0.25}">
+				 		<form:form action="capture" method="post" modelAttribute="trainer" title="Lanza la pokeball segun el profile en uso">
+							<input type="submit" value="⭕️ Lanzar pokeball ⭕️"/>
+						</form:form>
+				 	</c:if>
+			 	</td>
 				<td>
 					<button onclick="alert('OFERTON de Lanzamiento: 1xMasterBall=4.99$  2xMasterBall=9.99$  3xMasterBall=14.99$  ...')">💰️ Comprar MasterBall 💰️</button>
 				</td>
