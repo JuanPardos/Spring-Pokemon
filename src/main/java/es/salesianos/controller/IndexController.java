@@ -146,14 +146,14 @@ public class IndexController {
 
 	@PostMapping("combat")
 	public ModelAndView combat(Trainer trainerForm) {
-		getCombatMultiplier();
+		double multiplier = Math.random();
 		if (trainer.getPrimary().getStatus() == "Vivo") {
 			trainer.getWildPokemon()
 				.setHP(trainer.getWildPokemon().getHP() - (int) ((trainer.getPrimary().getAttack()) * multiplier));
 
 			if (trainer.getWildPokemon().getStatus() != "Durmiendo") {
-				trainer.getPrimary().setHP(
-					trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * (1 / multiplier)));
+				trainer.getPrimary()
+					.setHP(trainer.getPrimary().getHP() - (int) ((trainer.getWildPokemon().getAttack()) * multiplier));
 			}
 
 			trainer.getTeam().getPokemons().get(aux3).setHP(trainer.getPrimary().getHP()); //Actualiza la tabla.
@@ -246,51 +246,13 @@ public class IndexController {
 
 	@PostMapping("capture")
 	public ModelAndView capture(Trainer trainerForm) {
-		int tempCapture = trainer.getWildPokemon().getCaptureRate(); //Auxiliar para guardar indice de captura, se usa si el pokemon esta dormido.
-		float RNG = (int) ((Math.random() * 50) + 20); //Saca numero entre 20 y 70, sirve para la captura.
-		int LuckyCapture = (int) ((Math.random() * 25)); //Numeros del 1 al 25.
-
-		if (trainer.getWildPokemon().getStatus() == "Durmiendo") {
-			trainer.getWildPokemon().setCaptureRate((int) (trainer.getWildPokemon().getCaptureRate() * 0.9));
-		} else {
-			trainer.getWildPokemon().setCaptureRate(tempCapture);
-		}
-
-		if (LuckyCapture == 1) { //Captura critica, 4% de probabilidad. Sin importar que pokeball uses o vida del enemigo que lo puedes capturar.
-			trainer.setFeedback(trainer.getWildPokemon().getName() + " ha sido capturado mediante Captura Crítica! ");
-			if (!trainer.getTeam().isFull()) {
-				this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
-				createEnemy(trainerForm);
-			} else
-				trainer.setFeedback("No se puede añadir al equipo, esta completo");
-		} else {
-			if (RNG * (trainer.getBall().getCapturePower())
-				+ ((((float) (trainer.getWildPokemon().getMaxHP() - (float) trainer.getWildPokemon().getHP())
-					/ (float) (trainer.getWildPokemon().getMaxHP())) * 100) * 0.7) >= trainer.getWildPokemon()
-						.getCaptureRate()) { //Tiene en cuenta el RNG, el tipo de pokeball, la vida perdida y el indice de captura del enemigo.
-
-				trainer.setFeedback(trainer.getWildPokemon().getName() + " ha sido capturado");
-				if (!trainer.getTeam().isFull()) {
-					this.trainer.getTeam().addPokemon(trainer.getWildPokemon());
-					createEnemy(trainerForm);
-				} else
-					trainer.setFeedback("No se puede añadir al equipo, esta completo");
-			} else {
-				if (this.trainer.getPrimary().getStatus() != "Muerto") {
-					trainer.setFeedback("El pokemon se ha escapado");
-
-					if (trainer.getWildPokemon().getStatus() != "Muerto"
-						|| trainer.getWildPokemon().getStatus() != "Durmiendo") {
-						trainer.getPrimary().setHP(trainer.getPrimary().getHP() - trainer.getWildPokemon().getAttack());
-					}
-					if (trainer.getPrimary().getHP() <= 0) {
-						trainer.getPrimary().setHP(0);
-						trainer.getPrimary().setStatus("Muerto");
-					}
-				} else
-					trainer.setFeedback("Cambia de pokemon para seguir capturando");
-			}
-		}
+		int random = (int) (Math.random() * 100);
+		if (random <= trainer.getBall().getCapturePower()) {
+			trainer.getPokedex().addPokemon(trainer.getWildPokemon());
+			trainer.setFeedback("El pokemon salvaje fue capturado");
+			createEnemy(trainerForm);
+		} else
+			trainer.setFeedback("El pokemon salvaje se ha escapado");
 
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("trainer", this.trainer);
@@ -319,41 +281,41 @@ public class IndexController {
 		return modelAndView;
 	}
 
-	//NO FUNCIONA !
-	public void getCombatMultiplier() {
-		if (this.trainer.getPrimary().getType() == "Planta") {
-			switch (this.trainer.getWildPokemon().getType()) {
-				case "Agua" :
-					multiplier = 2.0;
-					break;
-				default :
-					multiplier = 0.5;
-					break;
-			}
-		}
-
-		if (this.trainer.getPrimary().getType() == "Fuego") {
-			switch (this.trainer.getWildPokemon().getType()) {
-				case "Planta" :
-					multiplier = 2.0;
-					break;
-				default :
-					multiplier = 0.5;
-					break;
-			}
-		}
-
-		if (this.trainer.getPrimary().getType() == "Agua") {
-			switch (this.trainer.getWildPokemon().getType()) {
-				case "Fuego" :
-					multiplier = 2.0;
-					break;
-				default :
-					multiplier = 0.5;
-					break;
-			}
-		}
-
-	}
+	//	//NO EXAMEN
+	//	public void getCombatMultiplier() {
+	//		if (this.trainer.getPrimary().getType() == "Planta") {
+	//			switch (this.trainer.getWildPokemon().getType()) {
+	//				case "Agua" :
+	//					multiplier = 2.0;
+	//					break;
+	//				default :
+	//					multiplier = 0.5;
+	//					break;
+	//			}
+	//		}
+	//
+	//		if (this.trainer.getPrimary().getType() == "Fuego") {
+	//			switch (this.trainer.getWildPokemon().getType()) {
+	//				case "Planta" :
+	//					multiplier = 2.0;
+	//					break;
+	//				default :
+	//					multiplier = 0.5;
+	//					break;
+	//			}
+	//		}
+	//
+	//		if (this.trainer.getPrimary().getType() == "Agua") {
+	//			switch (this.trainer.getWildPokemon().getType()) {
+	//				case "Fuego" :
+	//					multiplier = 2.0;
+	//					break;
+	//				default :
+	//					multiplier = 0.5;
+	//					break;
+	//			}
+	//		}
+	//
+	//	}
 
 }

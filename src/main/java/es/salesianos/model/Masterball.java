@@ -4,11 +4,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("pokeball")
-public class Pokeball extends AbstractPokeball {
+@Profile("masterball")
+public class Masterball extends AbstractPokeball {
 
-	public Pokeball() {
-		capturePower = 10;
-		name = "Pokeball";
+	public Masterball() {
+		capturePower = 100;
+		name = "Masterball";
 	}
 }

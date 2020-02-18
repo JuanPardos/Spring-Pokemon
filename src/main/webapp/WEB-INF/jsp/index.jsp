@@ -45,6 +45,7 @@
 			<input type="submit" value="Guardar pokemon" />
 		</form:form>
 		<br/>
+		<a>EQUIPO</a>
 		<table border="1" style="background-color: aqua">
 			<thead>
 				<tr>
@@ -62,6 +63,35 @@
 				<c:forEach var="item" items="${trainer.team.pokemons}">
 					<tr>
 						<td style="text-align:center"><c:out value="${count2}" /></td>
+						<td style="text-align:center"><c:out value="${item.name}" /></td>
+						<td style="text-align:center"><c:out value="${item.type}" /></td>
+						<td style="text-align:center"><c:out value="${item.status}" /></td>
+						<td style="text-align:center"><c:out value="${item.level}" /></td>
+						<td style="text-align:center"><c:out value="${item.HP}" /></td>
+						<td style="text-align:center"><c:out value="${item.attack}" /></td>
+					</tr>
+					<c:set var="count2" value="${count2 + 1}" scope="page"/>
+				</c:forEach>
+			</tbody>
+		</table>
+		<a>POKEDEX (Pokemons Capturados)</a>
+		<table border="1" style="background-color: aqua">
+			<thead>
+				<tr>
+					<td>#</td>
+					<td>Nombre</td>
+					<td>Tipo</td>
+					<td>Estado</td>
+					<td>Nivel</td>
+					<td>HP</td>
+					<td>Ataque</td>
+				</tr>
+			</thead>
+			<tbody>
+				<c:set var = "count5" scope = "page" value = "1"/>
+				<c:forEach var="item" items="${trainer.pokedex.pokemons}">
+					<tr>
+						<td style="text-align:center"><c:out value="${count5}" /></td>
 						<td style="text-align:center"><c:out value="${item.name}" /></td>
 						<td style="text-align:center"><c:out value="${item.type}" /></td>
 						<td style="text-align:center"><c:out value="${item.status}" /></td>
@@ -143,7 +173,12 @@
 							<input type="submit" value="⭕️ Lanzar pokeball ⭕️" disabled="disabled"/>
 						</form:form>
 				 	</c:if>
-				 	<c:if test="${trainer.wildPokemon.HP <= trainer.wildPokemon.maxHP*0.25}">
+				 	<c:if test="${trainer.wildPokemon.HP <= trainer.wildPokemon.maxHP*0.25 || trainer.ball.name == 'Masterball'}">
+				 		<form:form action="capture" method="post" modelAttribute="trainer" title="Lanza la pokeball segun el profile en uso">
+							<input type="submit" value="⭕️ Lanzar pokeball ⭕️"/>
+						</form:form>
+				 	</c:if>
+				 	<c:if test="${trainer.ball.name == 'Masterball'}">
 				 		<form:form action="capture" method="post" modelAttribute="trainer" title="Lanza la pokeball segun el profile en uso">
 							<input type="submit" value="⭕️ Lanzar pokeball ⭕️"/>
 						</form:form>

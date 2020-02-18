@@ -14,6 +14,9 @@ public class Trainer {
 	private Team team;
 
 	@Autowired
+	private Pokedex pokedex; //Aqui guarda los pokemons salvajes capturados.
+
+	@Autowired
 	private Ball ball;
 
 	private Pokemon primary;
@@ -80,6 +83,12 @@ public class Trainer {
 	}
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;
+	}
+	public Pokedex getPokedex() {
+		return pokedex;
+	}
+	public void setPokedex(Pokedex pokedex) {
+		this.pokedex = pokedex;
 	}
 
 }
