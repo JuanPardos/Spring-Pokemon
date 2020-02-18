@@ -281,41 +281,4 @@ public class IndexController {
 		return modelAndView;
 	}
 
-	//	//NO EXAMEN
-	//	public void getCombatMultiplier() {
-	//		if (this.trainer.getPrimary().getType() == "Planta") {
-	//			switch (this.trainer.getWildPokemon().getType()) {
-	//				case "Agua" :
-	//					multiplier = 2.0;
-	//					break;
-	//				default :
-	//					multiplier = 0.5;
-	//					break;
-	//			}
-	//		}
-	//
-	//		if (this.trainer.getPrimary().getType() == "Fuego") {
-	//			switch (this.trainer.getWildPokemon().getType()) {
-	//				case "Planta" :
-	//					multiplier = 2.0;
-	//					break;
-	//				default :
-	//					multiplier = 0.5;
-	//					break;
-	//			}
-	//		}
-	//
-	//		if (this.trainer.getPrimary().getType() == "Agua") {
-	//			switch (this.trainer.getWildPokemon().getType()) {
-	//				case "Fuego" :
-	//					multiplier = 2.0;
-	//					break;
-	//				default :
-	//					multiplier = 0.5;
-	//					break;
-	//			}
-	//		}
-	//
-	//	}
-
 }

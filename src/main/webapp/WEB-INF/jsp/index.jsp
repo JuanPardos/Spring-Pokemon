@@ -44,6 +44,7 @@
 			</form:select>
 			<input type="submit" value="Guardar pokemon" />
 		</form:form>
+		
 		<br/>
 		<a>EQUIPO</a>
 		<table border="1" style="background-color: aqua">
@@ -142,7 +143,7 @@
 			<tr>
 				<td>
 					<form:form action="createEnemy" method="post" modelAttribute="trainer" title="Busca un nuevo pokemon salvaje">
-						<input type="submit" value="🌿️ Entrar en la hierba alta 🌿️"/>
+						<input type="submit" value="🌿️ Buscar pokemon salvaje aleatorio 🌿️"/>
 					</form:form>
 				</td>
 				<td>
@@ -173,7 +174,7 @@
 							<input type="submit" value="⭕️ Lanzar pokeball ⭕️" disabled="disabled"/>
 						</form:form>
 				 	</c:if>
-				 	<c:if test="${trainer.wildPokemon.HP <= trainer.wildPokemon.maxHP*0.25 || trainer.ball.name == 'Masterball'}">
+				 	<c:if test="${trainer.wildPokemon.HP <= trainer.wildPokemon.maxHP*0.25}">
 				 		<form:form action="capture" method="post" modelAttribute="trainer" title="Lanza la pokeball segun el profile en uso">
 							<input type="submit" value="⭕️ Lanzar pokeball ⭕️"/>
 						</form:form>
