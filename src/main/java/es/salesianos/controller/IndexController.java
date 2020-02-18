@@ -107,11 +107,11 @@ public class IndexController {
 		aux3 = trainerForm.getAux();
 
 		tmp = this.trainer.getPrimary();
-		if (this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()).getStatus() == "Vivo") {
-			this.trainer.setPrimary(this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()));
-		} else
+		if (this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()).getStatus() == "Muerto") {
 			trainer.setFeedback("El pokemon está debilitado, no puede pelear");
-
+		} else {
+			this.trainer.setPrimary(this.trainer.getTeam().setAttackingPokemon(trainerForm.getAux()));
+		}
 		this.trainer.setSecondary(tmp);
 
 		if (this.trainer.getPrimary().getName() != null) {
